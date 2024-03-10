@@ -2,6 +2,7 @@ import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { Container, Typography } from "@mui/material";
 import { HeaderContainerStyled, HeaderStyled } from "./style";
+import { HOME_ROUTE } from "../../utils/constsRoute";
 
 const Header = () => {
   return (
@@ -12,7 +13,7 @@ const Header = () => {
             variant="h5"
             noWrap
             component="a"
-            href="#!"
+            href={HOME_ROUTE}
             sx={{
               mr: 2,
               flexGrow: 1,
