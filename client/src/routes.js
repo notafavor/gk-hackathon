@@ -1,6 +1,11 @@
 import AuthPage from "./pages/AuthPage/AuthPage";
 import HomePage from "./pages/HomePage/HomePage";
-import { HOME_ROUTE, LOGIN_ROUTE } from "./utils/constsRoute";
+import TranscriptionPage from "./pages/TranscriptionPage/TranscriptionPage";
+import {
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  TRANSCRIPTION_ROUTE,
+} from "./utils/constsRoute";
 
 export const publicRoutes = [
   {
@@ -9,7 +14,11 @@ export const publicRoutes = [
   },
   {
     path: LOGIN_ROUTE,
-    Component: AuthPage, // нужна ли эта страница?
+    Component: AuthPage,
+  },
+  {
+    path: TRANSCRIPTION_ROUTE,
+    Component: TranscriptionPage,
   },
 ];
 
