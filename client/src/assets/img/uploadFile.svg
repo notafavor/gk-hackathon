@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="xMinYMid" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"
+    fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"
+    stroke-miterlimit="1.5">
+    <path
+        d="M46.714 29.515c0-.123.02-.246.02-.37 0-6.602-5.42-11.951-11.992-11.951-4.734 0-8.81 2.782-10.72 6.807a6.043 6.043 0 00-2.752-.657c-3.04 0-5.555 2.423-6.048 5.34C11.608 29.926 9 33.479 9 37.544c0 5.104 4.117 9.262 9.2 9.262h28.38c4.621 0 8.42-3.83 8.42-8.501 0-4.672-3.645-8.78-8.286-8.79z"
+        fill="#1993e9" fill-rule="nonzero" />
+    <path d="M32 54.75v-26.5" fill="none" stroke="#fff" stroke-width="3" />
+    <path d="M32 56V41.5" fill="none" stroke="#2ecc71" stroke-width="3" />
+    <path d="M39 35.25l-7-7-7 7" fill="none" stroke="#fff" stroke-width="2.997"
+        stroke-miterlimit="1.414" />
+</svg>

@@ -1,0 +1,13 @@
+version: "3"
+services:
+  client:
+    stdin_open: true
+    # environment:
+    #   - CHOKIDAR_USEPOLLING=true
+    build:
+      dockerfile: Dockerfile.node
+      context: .
+    ports:
+      - 3000:3000
+
+
