@@ -70,7 +70,7 @@ const UploadFIleProgressBar = () => {
   return (
     <UploadBox>
       <p className="title">Upload your file</p>
-      <form className="upload-form">
+      <form className="upload-form" onClick={handleFileInputClick}>
         <FileInput
           className="file-input"
           type="file"
@@ -78,7 +78,7 @@ const UploadFIleProgressBar = () => {
           ref={fileInputRef}
           onChange={uploadFile}
         />
-        <Icon onClick={handleFileInputClick}>
+        <Icon>
           <UploadIcon width="64px" height="64px" />
         </Icon>
         <p>Browser File to upload</p>
