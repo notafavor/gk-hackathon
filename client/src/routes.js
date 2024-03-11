@@ -4,6 +4,7 @@ import TranscriptionPage from "./pages/TranscriptionPage/TranscriptionPage";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
+  REGISTRATION_ROUTE,
   TRANSCRIPTION_ROUTE,
 } from "./utils/constsRoute";
 
@@ -14,6 +15,10 @@ export const publicRoutes = [
   },
   {
     path: LOGIN_ROUTE,
+    Component: AuthPage,
+  },
+  {
+    path: REGISTRATION_ROUTE,
     Component: AuthPage,
   },
   {

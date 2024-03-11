@@ -1,41 +1,33 @@
 import React from "react";
-import { GoogleLogin } from "@react-oauth/google";
 import { Container, Typography } from "@mui/material";
 import { HeaderContainerStyled, HeaderStyled } from "./style";
-import { HOME_ROUTE } from "../../utils/constsRoute";
+import { HOME_ROUTE, LOGIN_ROUTE } from "../../utils/constsRoute";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <HeaderStyled>
       <Container maxWidth="lg">
         <HeaderContainerStyled>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href={HOME_ROUTE}
-            sx={{
-              mr: 2,
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <GoogleLogin
-            shape="circle"
-            text="signin"
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-            }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
+          <Link to={HOME_ROUTE}>
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              LOGO
+            </Typography>
+          </Link>
+          <Link to={LOGIN_ROUTE}>Войти</Link>
         </HeaderContainerStyled>
       </Container>
     </HeaderStyled>
