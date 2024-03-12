@@ -24,8 +24,8 @@ services:
       context: ./backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - /data/team5/media/:/opt/media/
-      - /data/team5/static/:/opt/static/
+      - /data/team5/backend/media/:/opt/media/
+      - /data/team5/backend/static/:/opt/staticfiles/
     ports:
       - 8000:8000
     env_file:

@@ -18,7 +18,7 @@ services:
     volumes:
       - ./backend/:/opt/app/
       - ./media/:/opt/media/
-      - ./static:/opt/static/
+      - ./staticfiles:/opt/app/staticfiles/
     ports:
       - 8000:8000
     env_file:
