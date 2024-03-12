@@ -14,6 +14,7 @@ services:
     volumes:
       - /data/nginx/certs:/etc/nginx/certs
       - /data/team5/client/nginx/prod.conf:/etc/nginx/conf.d/team5.opvk.tech.conf
+      - /data/team5/backend/static/:/opt/app/staticfiles/
     depends_on:
       - db
       - api
@@ -24,8 +25,8 @@ services:
       context: ./backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - /data/team5/backend/media/:/opt/media/
-      - /data/team5/backend/static/:/opt/staticfiles/
+      - /data/team5/backend/media/:/opt/app/media/
+      - /data/team5/backend/static/:/opt/app/staticfiles/
     ports:
       - 8000:8000
     env_file:
@@ -90,7 +91,7 @@ services:
              python manage.py makemigrations &&
              python manage.py migrate"
     volumes:
-      - /data/team5/static/:/opt/static/:/opt/static/
+      - /data/team5/backend/static/:/opt/app/staticfiles/
     env_file:
       - .env
     depends_on:

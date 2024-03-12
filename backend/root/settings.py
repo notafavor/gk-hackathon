@@ -140,7 +140,7 @@ USE_TZ = True
 
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
-
+MEDIA_URL = "/media/"
 
 # SSL
 USE_X_FORWARDED_HOST = True
