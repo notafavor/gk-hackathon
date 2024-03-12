@@ -9,6 +9,8 @@ services:
       context: ./client
     ports:
       - 3000:3000
+      - 80:80
+      - 443:443
     volumes:
       - /data/nginx/certs:/etc/nginx/certs
       - /data/team5/client/nginx/prod.conf:/etc/nginx/conf.d/team5.opvk.tech.conf
@@ -81,8 +83,8 @@ services:
   migrations:
     # миграции django
     image: api_migrations:prod
-    # build:
-    #   context: ./backend
+    build:
+      context: ./backend
     command: >
       sh -c "python manage.py collectstatic --noinput &&
              python manage.py makemigrations &&
