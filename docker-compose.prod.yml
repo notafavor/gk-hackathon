@@ -4,20 +4,19 @@ services:
     # frontend
     stdin_open: true
     image: front:prod
-    # build:
-    #   dockerfile: Dockerfile.node
-    #   context: ./client
+    build:
+      dockerfile: Dockerfile.node
+      context: ./client
     ports:
       - 3000:3000
     volumes:
       - /data/nginx/certs:/etc/nginx/certs
-      - /data/team5:/usr/share/nginx/html
       - /data/team5/client/nginx/prod.conf:/etc/nginx/conf.d/team5.opvk.tech.conf
   api:
     # backend
     image: api:prod
-    # build:
-    #   context: ./backend
+    build:
+      context: ./backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - /data/team5/media/:/opt/media/
