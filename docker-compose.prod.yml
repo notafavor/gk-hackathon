@@ -12,6 +12,9 @@ services:
     volumes:
       - /data/nginx/certs:/etc/nginx/certs
       - /data/team5/client/nginx/prod.conf:/etc/nginx/conf.d/team5.opvk.tech.conf
+    depends_on:
+      - db
+      - api
   api:
     # backend
     image: api:prod
