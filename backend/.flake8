@@ -1,0 +1,57 @@
+# https://flake8.pycqa.org/en/latest/
+[flake8]
+exclude =
+       # No need to traverse our git directory
+       .git,
+
+       # There's no value in checking cache directories
+       __pycache__,
+
+       # No need to check tests
+       tests,
+
+       # Do not check migrations (because it generated automatically)
+       migrations,
+
+       # Do not check settings.py
+       settings.py,
+       local_settings.py,
+
+       # Do not check manage.py
+       manage.py,
+
+       # Do not touch test modules
+       test.py,
+       tests.py,
+       tests/,
+
+       # Do not check scripts (it's used couple times)
+       ./src/scripts/,
+
+       # Do not check virtual envs
+       .venv
+
+ignore =
+       I005,
+       # Additional newline in a group of imports (problems with apps.app_name)
+       I202,
+       # line break after binary operator
+       W504,
+       # null=True usage on CharField
+       DJ01,
+       # leading comma
+       C812
+
+per-file-ignores =
+       # Allow to use cls as first argument in @classproperty
+       analytic/models.py: N805
+       utils/base_models.py: N805
+       utils/models/mixins.py: N805
+       logistic/models/__init__.py: F401, F403, I001
+
+jobs = 2
+show-source = true
+enable-extensions = G
+format = pylint
+max-line-length = 120
+inline-quotes = ''
