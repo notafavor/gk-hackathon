@@ -142,11 +142,12 @@ STATIC_URL = "/staticfiles/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 MEDIA_URL = "/media/"
 
+CORS_ALLOW_ALL_ORIGINS = True
 # SSL
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("X-FORWARDED-PROTO", "https")
-SESSION_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://*.opvk.tech"]
+# SESSION_COOKIE_SECURE = True
+# CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://*.opvk.tech"]
 # CSRF_COOKIE_SECURE = True
 
 # SECURE_CONTENT_TYPE_NOSNIFF = True
