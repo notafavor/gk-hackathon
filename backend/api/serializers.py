@@ -4,11 +4,11 @@ from . import models
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Recognition
-        fields = ["file", "name", "dt_create", "author"]
+        model = models.File
+        fields = ["id", "file", "name", "dt_create", "author"]
 
 class RecognitionSerializer(serializers.ModelSerializer):
-    file = FileSerializer()
+    _file = FileSerializer(read_only=True, source="file")
     class Meta:
         model = models.Recognition
-        fields = ["file", "status", "dt_create", "author"]
+        fields = ["id", "file", "_file", "status", "dt_create", "author"]
