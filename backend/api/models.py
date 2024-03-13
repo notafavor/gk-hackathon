@@ -52,7 +52,8 @@ class Recognition(BaseProtected):
     status = models.CharField(
         "Статус", max_length=255, choices=RecognitionChoices.choices, default=RecognitionChoices.NEW
     )
+    result = models.JSONField(verbose_name="Реузльтат распознавания", null=True, blank=True)
 
     class Meta:
-        verbose_name = "Запрос на распознование"
-        verbose_name_plural = "Запросы на распознование"
+        verbose_name = "Запрос на распознавание"
+        verbose_name_plural = "Запросы на распазнвание"

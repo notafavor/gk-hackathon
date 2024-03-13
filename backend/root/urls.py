@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/v1/auth/', LoginAPIView.as_view(), name='user_login'),
     path('api/v1/logout/', LogoutAPIView.as_view(), name='user_logout'),
     path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path("api-auth/", include("rest_framework.urls"))
 ]
