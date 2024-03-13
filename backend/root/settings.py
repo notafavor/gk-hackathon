@@ -91,6 +91,9 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 # simple jwt
@@ -148,9 +151,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 # SSL
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("X-FORWARDED-PROTO", "https")
-# SESSION_COOKIE_SECURE = True
-# CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://*.opvk.tech"]
-# CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://*.opvk.tech", "http://localhost", "http://api"]
+CSRF_COOKIE_SECURE = True
 
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
