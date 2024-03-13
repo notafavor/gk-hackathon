@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
+import { observer } from "mobx-react-lite";
 import { ReactComponent as UploadIcon } from "../../assets/img/uploadFile.svg";
 import axios from "axios";
 import {
@@ -15,18 +16,31 @@ import {
   UploadFileDetails,
   UploadedArea,
 } from "./style";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../..";
+import { LOGIN_ROUTE } from "../../utils/constsRoute";
 
-const UploadFIleProgressBar = () => {
+const UploadFIleProgressBar = observer(() => {
+  const { user } = useContext(Context);
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showProgress, setShowProgress] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileInputClick = () => {
+    if (!user.isAuth) {
+      navigate(LOGIN_ROUTE);
+      return;
+    }
     fileInputRef.current.click();
   };
 
   const uploadFile = (event) => {
+    if (!user.isAuth) {
+      navigate(LOGIN_ROUTE);
+      return;
+    }
     const file = event.target.files[0];
     if (!file) return;
 
@@ -117,6 +131,6 @@ const UploadFIleProgressBar = () => {
       </UploadedArea>
     </UploadBox>
   );
-};
+});
 
 export default UploadFIleProgressBar;

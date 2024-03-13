@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Typography } from "@mui/material";
 import { HeaderContainerStyled, HeaderStyled } from "./style";
+import { observer } from "mobx-react-lite";
 import { HOME_ROUTE, LOGIN_ROUTE } from "../../utils/constsRoute";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { logOut, refreshToken } from "../../http/userAPI";
+import { Context } from "../..";
 
-const Header = () => {
+const Header = observer(() => {
+  const { user } = useContext(Context);
+  const navigate = useNavigate();
+
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        refreshToken();
+      }
+    }
+    user.setUser({});
+    user.setIsAuth(false);
+    navigate(HOME_ROUTE);
+  };
+
   return (
     <HeaderStyled>
       <Container maxWidth="lg">
@@ -27,11 +47,17 @@ const Header = () => {
               LOGO
             </Typography>
           </Link>
-          <Link to={LOGIN_ROUTE}>Войти</Link>
+          {user.isAuth ? (
+            <Button variant="outlined" onClick={handleLogOut}>
+              Log out
+            </Button>
+          ) : (
+            <Link to={LOGIN_ROUTE}>Sign In</Link>
+          )}
         </HeaderContainerStyled>
       </Container>
     </HeaderStyled>
   );
-};
+});
 
 export default Header;

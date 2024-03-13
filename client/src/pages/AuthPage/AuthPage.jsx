@@ -25,6 +25,7 @@ const AuthPage = observer(() => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLogin = location.pathname === LOGIN_ROUTE;
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,21 +36,16 @@ const AuthPage = observer(() => {
     try {
       let data;
       if (isLogin) {
-        data = await login(email, password);
+        data = await login(username, password);
       } else {
-        data = await registration(email, password);
+        data = await registration(username, email, password);
       }
       user.setUser(data);
       user.setIsAuth(true);
       navigate(HOME_ROUTE);
     } catch (e) {
-      alert(e.response.data.message);
+      console.error(e);
     }
-    // TODO удалить это
-    // console.log({
-    //   email: email,
-    //   password: password,
-    // });
   };
 
   return (
@@ -80,14 +76,28 @@ const AuthPage = observer(() => {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
+            {!isLogin && (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            )}
             <TextField
               margin="normal"
               required
