@@ -3,9 +3,11 @@ from rest_framework.views import APIView
 from rest_framework import response, status
 from . import serializers
 from django.contrib.auth import authenticate
+from rest_framework.permissions import AllowAny
 
 
 class RegistrationAPIView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = serializers.UserSerializer(data=request.data)
@@ -28,6 +30,7 @@ class RegistrationAPIView(APIView):
 
 
 class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
         data = request.data
@@ -51,3 +54,16 @@ class LoginAPIView(APIView):
             },
             status=status.HTTP_200_OK,
         )
+
+
+class LogoutAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        refresh_token = request.data.get("refresh_token")
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except Exception as e:
+            return response.Response({"error": "Неверный Refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+        return response.Response({"success": "Выход успешен"}, status=status.HTTP_200_OK)
