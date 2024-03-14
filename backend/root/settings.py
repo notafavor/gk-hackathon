@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta
-
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,6 +46,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "root.middleware.StaticHostPathMiddleware",
 ]
 
 ROOT_URLCONF = "root.urls"
@@ -90,7 +91,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.BasicAuthentication",
-        # "rest_framework.authentication.SessionAuthentication", # TODO: включить для DRF
+        "root.auth.NoCsrfSessionAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -158,3 +159,13 @@ CSRF_COOKIE_SECURE = True
 # SECURE_CONTENT_TYPE_NOSNIFF = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # SECURE_HSTS_PRELOAD = True
+
+# host path settings
+host_struct = urlparse(os.environ.get("HOST_PATH"))
+
+HOST_PATH_SCHEME = host_struct.scheme
+HOST_PATH_HOSTNAME = host_struct.hostname
+HOST_PATH_NETLOC = host_struct.netloc
+HOST_PATH_PORT = host_struct.port or (443 if host_struct.scheme == 'https' else 80)
+
+ALLOWED_HOSTS += [HOST_PATH_HOSTNAME]

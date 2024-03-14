@@ -15,6 +15,7 @@ services:
       - /data/nginx/certs:/etc/nginx/certs
       - /data/team5/client/nginx/prod.conf:/etc/nginx/conf.d/team5.opvk.tech.conf
       - /data/team5/backend/static/:/opt/app/staticfiles/
+      - /data/team5/backend/media/:/opt/app/media/
     depends_on:
       - db
       - api
