@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
+    "django_celery_results",
 ]
 
 APPS = [
@@ -166,6 +167,12 @@ host_struct = urlparse(os.environ.get("HOST_PATH"))
 HOST_PATH_SCHEME = host_struct.scheme
 HOST_PATH_HOSTNAME = host_struct.hostname
 HOST_PATH_NETLOC = host_struct.netloc
-HOST_PATH_PORT = host_struct.port or (443 if host_struct.scheme == 'https' else 80)
+HOST_PATH_PORT = host_struct.port or (443 if host_struct.scheme == "https" else 80)
 
 ALLOWED_HOSTS += [HOST_PATH_HOSTNAME]
+
+# celery
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "redis://redis:6379"
+CELERY_RESULT_EXTENDED = True

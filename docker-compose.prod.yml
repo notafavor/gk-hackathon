@@ -97,3 +97,23 @@ services:
       - .env
     depends_on:
       - db
+  celery:
+    build: ./backend
+    command: celery -A root worker -l info
+    volumes:
+      - /data/team5/backend/media/:/opt/app/media/
+    depends_on:
+      - redis
+    env_file:
+      - .env
+  # celery-beat:
+  #   build: ./project
+  #   command: celery -A core beat -l info
+  #   volumes:
+  #     - ./backend/:/opt/app/
+  #   depends_on:
+  #     - redis
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"

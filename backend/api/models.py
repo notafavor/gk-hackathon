@@ -1,7 +1,8 @@
 import os
-from django.db import models
+
 from api.utils import USER_MODEL, get_file_path
 from django.core.validators import FileExtensionValidator
+from django.db import models
 
 
 class BaseProtected(models.Model):
@@ -41,19 +42,32 @@ class File(BaseProtected):
 
 
 class RecognitionChoices(models.TextChoices):
-    NEW = ("new", "создан")
-    IN_PROCESS = ("in_process", "обработка")
-    COMPLEATED = ("compleated", "завершено")
-    ERROR = ("error", "ошибка")
+    RETRY = ("retry", "Перезапуск")
+    SUCCESS = ("success", "Успешно")
+    FAILURE = ("failure", "Ошибка")
+    REVOKED = ("revoked", "Отменено")
+    STARTED = ("started", "Запущено")
+    PENDING = ("pending", "В очереди")
+    RECEIVED = ("received", "Получено")
+    REJECTED = ("rejected", "Отклонено")
 
 
 class Recognition(BaseProtected):
     file = models.ForeignKey(File, verbose_name="Файл", null=True, blank=True, on_delete=models.CASCADE)
     status = models.CharField(
-        "Статус", max_length=255, choices=RecognitionChoices.choices, default=RecognitionChoices.NEW
+        "Статус", max_length=255, choices=RecognitionChoices.choices, default=RecognitionChoices.PENDING
     )
     result = models.JSONField(verbose_name="Реузльтат распознавания", null=True, blank=True)
 
     class Meta:
         verbose_name = "Запрос на распознавание"
         verbose_name_plural = "Запросы на распазнвание"
+    
+    def save(self, *args, **kwargs):
+        from .tasks import recognition_task
+        created = self.pk is None
+        super().save(*args, **kwargs)
+        if created:
+            recognition_task.delay(self.pk)
+        if created:
+            recognition_task.delay(self.pk)
