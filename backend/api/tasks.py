@@ -15,4 +15,4 @@ def recognition_task(obj_id):
     if instance:
         time.sleep(15)
         qs.update(result=RESULT, status=RecognitionChoices.SUCCESS)
-        return RESULT
+        return True
