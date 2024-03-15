@@ -104,7 +104,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
 }
 
@@ -174,5 +174,3 @@ ALLOWED_HOSTS += [HOST_PATH_HOSTNAME]
 # celery
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "django-db"
-CELERY_CACHE_BACKEND = "redis://redis:6379"
-CELERY_RESULT_EXTENDED = True
