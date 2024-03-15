@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "django_celery_results",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
 ]
 
 APPS = [
@@ -97,10 +99,21 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# swagger: drf_spectacular
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Hackathon project API",
+    "DESCRIPTION": "Hackathon project",
+    "VERSION": "v1",
+    "SERVE_INCLUDE_SCHEMA": True,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
 }
 
 # simple jwt
-
 SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -154,7 +167,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # SSL
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("X-FORWARDED-PROTO", "https")
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "https://*.opvk.tech", "http://localhost", "http://api"]
+CSRF_TRUSTED_ORIGINS = ["https://*.opvk.tech", "http://localhost:3000", "http://api", "http://localhost:8000"]
 CSRF_COOKIE_SECURE = True
 
 # SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -174,3 +187,5 @@ ALLOWED_HOSTS += [HOST_PATH_HOSTNAME]
 # celery
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "django-db"
+# DEVELOP Mode
+IS_DEVELOP = os.environ.get("IS_DEVELOP", False)

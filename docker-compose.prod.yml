@@ -24,7 +24,7 @@ services:
     image: api:prod
     build:
       context: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn -c file:gunicorn.py root.wsgi
     volumes:
       - /data/team5/backend/media/:/opt/app/media/
       - /data/team5/backend/static/:/opt/app/staticfiles/
