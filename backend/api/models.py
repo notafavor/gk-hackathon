@@ -69,5 +69,3 @@ class Recognition(BaseProtected):
         super().save(*args, **kwargs)
         if created:
             recognition_task.delay(self.pk)
-        if created:
-            recognition_task.delay(self.pk)
