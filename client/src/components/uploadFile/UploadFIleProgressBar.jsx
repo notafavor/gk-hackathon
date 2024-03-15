@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { ReactComponent as UploadIcon } from "../../assets/img/uploadFile.svg";
-import axios from "axios";
 import {
   FileInput,
   FileLoading,
@@ -19,6 +18,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Context } from "../..";
 import { LOGIN_ROUTE } from "../../utils/constsRoute";
+import { jwtDecode } from "jwt-decode";
+import { $authHost } from "../../http";
+import { refreshToken } from "../../http/userAPI";
+import { fetchFileUser } from "../../http/fileApi";
 
 const UploadFIleProgressBar = observer(() => {
   const { user } = useContext(Context);
@@ -28,6 +31,33 @@ const UploadFIleProgressBar = observer(() => {
   const [showProgress, setShowProgress] = useState(false);
   const fileInputRef = useRef(null);
 
+  useEffect(() => { // TODO надо разобраться, как обновлять загруженные файлы
+    const fetchFile = async () => {
+      try {
+        const response = await fetchFileUser();
+        console.log(response);
+        setUploadedFiles((prevFiles) => [
+          ...prevFiles,
+          ...response.map((file) => ({
+            name: file.name,
+            date: file.dt_create,
+          })),
+        ]);
+      } catch (error) {
+        await refreshToken();
+        const response = await fetchFileUser();
+        setUploadedFiles((prevFiles) => [
+          ...prevFiles,
+          ...response.map((file) => ({
+            name: file.name,
+            date: file.dt_create,
+          })),
+        ]);
+      }
+    };
+    fetchFile();
+  }, []);
+
   const handleFileInputClick = () => {
     if (!user.isAuth) {
       navigate(LOGIN_ROUTE);
@@ -36,7 +66,7 @@ const UploadFIleProgressBar = observer(() => {
     fileInputRef.current.click();
   };
 
-  const uploadFile = (event) => {
+  const uploadFile = async (event) => {
     if (!user.isAuth) {
       navigate(LOGIN_ROUTE);
       return;
@@ -45,40 +75,50 @@ const UploadFIleProgressBar = observer(() => {
     if (!file) return;
 
     const fileName =
-      file.name.length > 12
-        ? `${file.name.substring(0, 13)}... .${file.name.split(".")[1]}`
+      file.name.length > 20
+        ? `${file.name.substring(0, 21)}... .${file.name.split(".")[1]}`
         : file.name;
+
+    let accessToken = localStorage.getItem("accessToken");
+    const dataUser = jwtDecode(accessToken);
 
     const formData = new FormData();
 
-    formData.append("files", file);
+    formData.append("file", file);
+    formData.append("name", fileName);
+    formData.append("author", dataUser.user_id);
     setFiles((prevState) => [...prevState, { name: fileName, loading: 0 }]);
     setShowProgress(true);
-    axios
-      .post("http://127.0.0.1:5000/api", formData, {
-        onUploadProgress: ({ loaded, total }) => {
-          setFiles((prevState) => {
-            const newFiles = [...prevState];
-            newFiles[newFiles.length - 1].loading = Math.floor(
-              (loaded / total) * 100
-            );
-            return newFiles;
-          });
-          if (loaded === total) {
-            const fileSize =
-              total < 1024
-                ? `${total} KB`
-                : `${(loaded / (1024 * 1024)).toFixed(2)} MB`;
-            setUploadedFiles([
-              ...uploadedFiles,
-              { name: fileName, size: fileSize },
-            ]);
-            setFiles([]);
-            setShowProgress(false);
-          }
-        },
-      })
-      .catch(console.error);
+    try {
+      const response = await $authHost.post(
+        "https://team5.opvk.tech/api/v1/files/",
+        formData,
+        {
+          onUploadProgress: ({ loaded, total }) => {
+            setFiles((prevState) => {
+              const newFiles = [...prevState];
+              newFiles[newFiles.length - 1].loading = Math.floor(
+                (loaded / total) * 100
+              );
+              return newFiles;
+            });
+            if (loaded === total) {
+              // setUploadedFiles([...uploadedFiles, { name: fileName }]);
+              setFiles([]);
+              setShowProgress(false);
+            }
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        await refreshToken();
+        return uploadFile(event);
+      }
+      console.error(error);
+      throw error;
+    }
   };
 
   return (
@@ -116,18 +156,26 @@ const UploadFIleProgressBar = observer(() => {
         </LoadingArea>
       )}
       <UploadedArea>
-        {uploadedFiles.map((file, index) => (
-          <FileRow key={index}>
-            <UploadFileContent className="upload">
-              <i className="fas fa-file-alt"></i>
-              <UploadFileDetails>
-                <span className="details-span name">{file.name}</span>
-                <span className="details-span size">{file.size}</span>
-              </UploadFileDetails>
-            </UploadFileContent>
-            <i className="fas fa-check"></i>
-          </FileRow>
-        ))}
+        {uploadedFiles.map((file, index) => {
+          const fileDate = new Date(file.date);
+          const formattedDate = fileDate.toLocaleDateString(undefined, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+          return (
+            <FileRow key={index}>
+              <UploadFileContent className="upload">
+                <i className="fas fa-file-alt"></i>
+                <UploadFileDetails>
+                  <span className="details-span name">{file.name}</span>
+                  <span className="details-span name">{formattedDate}</span>
+                </UploadFileDetails>
+              </UploadFileContent>
+              <i className="fas fa-check"></i>
+            </FileRow>
+          );
+        })}
       </UploadedArea>
     </UploadBox>
   );

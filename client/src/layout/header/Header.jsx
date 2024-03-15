@@ -17,7 +17,14 @@ const Header = observer(() => {
       await logOut();
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        refreshToken();
+        try {
+          await refreshToken();
+          await logOut();
+        } catch (refreshError) {
+          console.error("Failed to refresh token or log out:", refreshError);
+        }
+      } else {
+        console.error("Failed to log out:", error);
       }
     }
     user.setUser({});
