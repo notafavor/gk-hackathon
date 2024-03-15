@@ -30,6 +30,7 @@ const Header = observer(() => {
     user.setUser({});
     user.setIsAuth(false);
     navigate(HOME_ROUTE);
+    window.location.reload();
   };
 
   return (
@@ -59,7 +60,14 @@ const Header = observer(() => {
               Log out
             </Button>
           ) : (
-            <Link to={LOGIN_ROUTE}>Sign In</Link>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                navigate(LOGIN_ROUTE);
+              }}
+            >
+              Sign In
+            </Button>
           )}
         </HeaderContainerStyled>
       </Container>

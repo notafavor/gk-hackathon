@@ -15,47 +15,62 @@ import {
   UploadFileDetails,
   UploadedArea,
 } from "./style";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../..";
-import { LOGIN_ROUTE } from "../../utils/constsRoute";
+import { LOGIN_ROUTE, TRANSCRIPTION_ROUTE } from "../../utils/constsRoute";
 import { jwtDecode } from "jwt-decode";
 import { $authHost } from "../../http";
 import { refreshToken } from "../../http/userAPI";
-import { fetchFileUser } from "../../http/fileApi";
+import { createRecognitions, fetchRecognitions } from "../../http/fileApi";
+import ModalWindow from "../ModalWindow";
 
 const UploadFIleProgressBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
+  const [errorModal, setErrorModal] = useState(false);
+  const [errorText, setErrorText] = useState("");
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showProgress, setShowProgress] = useState(false);
   const fileInputRef = useRef(null);
 
-  useEffect(() => { // TODO надо разобраться, как обновлять загруженные файлы
+  const handleClose = () => setErrorModal(false);
+
+  useEffect(() => {
     const fetchFile = async () => {
-      try {
-        const response = await fetchFileUser();
-        console.log(response);
-        setUploadedFiles((prevFiles) => [
-          ...prevFiles,
-          ...response.map((file) => ({
-            name: file.name,
-            date: file.dt_create,
-          })),
-        ]);
-      } catch (error) {
-        await refreshToken();
-        const response = await fetchFileUser();
-        setUploadedFiles((prevFiles) => [
-          ...prevFiles,
-          ...response.map((file) => ({
-            name: file.name,
-            date: file.dt_create,
-          })),
-        ]);
+      let refToken = localStorage.getItem("refreshToken");
+      let accessToken = localStorage.getItem("accessToken");
+      if (refToken && accessToken) {
+        try {
+          const file = await fetchRecognitions();
+          setUploadedFiles(() => [
+            ...file.map((file) => ({
+              id: file.id,
+              name: file._file.name,
+              date: file._file.dt_create,
+              status: file.status,
+            })),
+          ]);
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            await refreshToken();
+            const file = await fetchRecognitions();
+            setUploadedFiles(() => [
+              ...file.map((file) => ({
+                id: file.id,
+                name: file._file.name,
+                date: file._file.dt_create,
+                status: file.status,
+              })),
+            ]);
+          }
+        }
       }
     };
     fetchFile();
+    const interval = setInterval(fetchFile, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleFileInputClick = () => {
@@ -103,81 +118,110 @@ const UploadFIleProgressBar = observer(() => {
               return newFiles;
             });
             if (loaded === total) {
-              // setUploadedFiles([...uploadedFiles, { name: fileName }]);
               setFiles([]);
               setShowProgress(false);
             }
           },
         }
       );
-      return response;
+      const recognitions = await createRecognitions(response.data.id);
+      setErrorModal(false);
+      return recognitions;
     } catch (error) {
       if (error.response && error.response.status === 401) {
         await refreshToken();
         return uploadFile(event);
       }
+      setErrorText(error.response.data.file[0]);
+      setErrorModal(true);
       console.error(error);
-      throw error;
     }
   };
 
   return (
-    <UploadBox>
-      <p className="title">Upload your file</p>
-      <form className="upload-form" onClick={handleFileInputClick}>
-        <FileInput
-          className="file-input"
-          type="file"
-          hidden
-          ref={fileInputRef}
-          onChange={uploadFile}
-        />
-        <Icon>
-          <UploadIcon width="64px" height="64px" />
-        </Icon>
-        <p>Browser File to upload</p>
-      </form>
-      {showProgress && (
-        <LoadingArea>
-          {files.map((file, index) => (
-            <FileRow key={index}>
-              <i className="fas fa-file-alt"></i>
-              <LoadFileContent>
-                <LoadFileDetails>
-                  <span className="details-span name">{`${file.name} - uploading`}</span>
-                  <span className="details-span percent">{`${file.loading}%`}</span>
-                  <FileLoadingBar>
-                    <FileLoading style={{ width: `${file.loading}%` }} />
-                  </FileLoadingBar>
-                </LoadFileDetails>
-              </LoadFileContent>
-            </FileRow>
-          ))}
-        </LoadingArea>
-      )}
-      <UploadedArea>
-        {uploadedFiles.map((file, index) => {
-          const fileDate = new Date(file.date);
-          const formattedDate = fileDate.toLocaleDateString(undefined, {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-          return (
-            <FileRow key={index}>
-              <UploadFileContent className="upload">
+    <>
+      <UploadBox>
+        <p className="title">Upload your file</p>
+        <form className="upload-form" onClick={handleFileInputClick}>
+          <FileInput
+            className="file-input"
+            type="file"
+            hidden
+            ref={fileInputRef}
+            onChange={uploadFile}
+          />
+          <Icon>
+            <UploadIcon width="64px" height="64px" />
+          </Icon>
+          <p>Browser File to upload</p>
+        </form>
+        {showProgress && (
+          <LoadingArea>
+            {files.map((file, index) => (
+              <FileRow key={index}>
                 <i className="fas fa-file-alt"></i>
-                <UploadFileDetails>
-                  <span className="details-span name">{file.name}</span>
-                  <span className="details-span name">{formattedDate}</span>
-                </UploadFileDetails>
-              </UploadFileContent>
-              <i className="fas fa-check"></i>
-            </FileRow>
-          );
-        })}
-      </UploadedArea>
-    </UploadBox>
+                <LoadFileContent>
+                  <LoadFileDetails>
+                    <span className="details-span name">{`${file.name} - uploading`}</span>
+                    <span className="details-span percent">{`${file.loading}%`}</span>
+                    <FileLoadingBar>
+                      <FileLoading style={{ width: `${file.loading}%` }} />
+                    </FileLoadingBar>
+                  </LoadFileDetails>
+                </LoadFileContent>
+              </FileRow>
+            ))}
+          </LoadingArea>
+        )}
+        <UploadedArea>
+          {uploadedFiles.map((file, index) => {
+            const fileDate = new Date(file.date);
+            const formattedDate = fileDate.toLocaleDateString(undefined, {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            });
+            return (
+              <FileRow key={index}>
+                {file.status === "pending" ? (
+                  <>
+                    <UploadFileContent className="upload">
+                      <i className="fas fa-file-alt"></i>
+                      <UploadFileDetails>
+                        <span className="details-span name">{file.name}</span>
+                        <span className="details-span name">
+                          {formattedDate}
+                        </span>
+                        <span className="details-span name">{file.status}</span>
+                      </UploadFileDetails>
+                    </UploadFileContent>
+                    <i className="fas fa-check"></i>
+                  </>
+                ) : (
+                  <Link to={`${TRANSCRIPTION_ROUTE}/${file.id}`}>
+                    <UploadFileContent className="upload">
+                      <i className="fas fa-file-alt"></i>
+                      <UploadFileDetails>
+                        <span className="details-span name">{file.name}</span>
+                        <span className="details-span name">
+                          {formattedDate}
+                        </span>
+                        <span className="details-span name">{file.status}</span>
+                      </UploadFileDetails>
+                    </UploadFileContent>
+                  </Link>
+                )}
+              </FileRow>
+            );
+          })}
+        </UploadedArea>
+      </UploadBox>
+      <ModalWindow
+        isOpen={errorModal}
+        handleClose={handleClose}
+        errorText={errorText}
+      />
+    </>
   );
 });
 

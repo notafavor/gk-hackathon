@@ -21,15 +21,11 @@ export const publicRoutes = [
     path: REGISTRATION_ROUTE,
     Component: AuthPage,
   },
-  {
-    path: TRANSCRIPTION_ROUTE,
-    Component: TranscriptionPage,
-  },
 ];
 
 export const authRoutes = [
-  //   {
-  //     path: ,
-  //     Component: ,
-  //   },
+  {
+    path: TRANSCRIPTION_ROUTE + "/:id",
+    Component: TranscriptionPage,
+  },
 ];
