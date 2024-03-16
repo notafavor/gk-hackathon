@@ -24,4 +24,4 @@ class RecognitionSerializer(ProtectedSerializer):
     _file = FileSerializer(read_only=True, source="file")
     class Meta:
         model = models.Recognition
-        fields = ["id", "file", "_file", "status", "dt_create", "author", "result"]
+        fields = ["id", "file", "_file", "status", "dt_create", "author", "result", "channel"]

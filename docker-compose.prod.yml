@@ -36,6 +36,24 @@ services:
       - db
       - migrations
       # - minio
+  chat:
+    # backend
+    image: chat:prod
+    build:
+      context: ./backend
+    command: daphne -b 0.0.0.0 -p 8001 chat.asgi:application
+    volumes:
+      - /data/team5/backend/:/opt/app/
+    ports:
+      - 8001:8001
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - migrations
+      - api
+      - redis
+      # - minio
   db:
     # сервис БД
     image: "postgres:16.2-alpine3.19"

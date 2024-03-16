@@ -101,6 +101,20 @@ services:
       - redis
     env_file:
       - .env
+  chat: # asgi сервер для websockets
+    build:
+      context: ./backend
+    command: daphne -b 0.0.0.0 -p 8001 chat.asgi:application
+    volumes:
+      - ./backend/:/opt/app/
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+      - migrations
+    ports:
+      - 8001:8001
   # celery-beat:
   #   build: ./project
   #   command: celery -A core beat -l info
@@ -108,6 +122,8 @@ services:
   #     - ./backend/:/opt/app/
   #   depends_on:
   #     - redis
+  #     - db
+  #     - migrations
   redis:
     image: redis:alpine
     ports:

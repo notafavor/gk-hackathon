@@ -19,6 +19,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 
 APPS = [
     "api",
+    "chat"
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + APPS
@@ -189,3 +191,14 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "django-db"
 # DEVELOP Mode
 IS_DEVELOP = os.environ.get("IS_DEVELOP", False)
+
+# websockets
+ASGI_APPLICATION = "chat.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://redis:6379")],
+        },
+    },
+}
