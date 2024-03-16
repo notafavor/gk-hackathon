@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import { Container, Typography } from "@mui/material";
 import { HeaderContainerStyled, HeaderStyled } from "./style";
 import { observer } from "mobx-react-lite";
 import { HOME_ROUTE, LOGIN_ROUTE } from "../../utils/constsRoute";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 import { logOut, refreshToken } from "../../http/userAPI";
+import { Button, Divider } from "@quark-uilib/components";
 import { Context } from "../..";
 
 const Header = observer(() => {
@@ -35,33 +34,19 @@ const Header = observer(() => {
 
   return (
     <HeaderStyled>
-      <Container maxWidth="lg">
+      <div className="container">
         <HeaderContainerStyled>
-          <Link to={HOME_ROUTE}>
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              sx={{
-                mr: 2,
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LOGO
-            </Typography>
-          </Link>
+          <Button size="l" viewType="link" onClick={() => navigate(HOME_ROUTE)}>
+            LOGO
+          </Button>
           {user.isAuth ? (
-            <Button variant="outlined" onClick={handleLogOut}>
+            <Button size="m" color="red" onClick={handleLogOut}>
               Log out
             </Button>
           ) : (
             <Button
-              variant="outlined"
+              size="m"
+              color="green"
               onClick={() => {
                 navigate(LOGIN_ROUTE);
               }}
@@ -70,7 +55,8 @@ const Header = observer(() => {
             </Button>
           )}
         </HeaderContainerStyled>
-      </Container>
+      </div>
+      <Divider />
     </HeaderStyled>
   );
 });

@@ -1,12 +1,11 @@
 import React from "react";
 import UploadFIleProgressBar from "../../components/uploadFile/UploadFIleProgressBar";
-import { Container } from "@mui/material";
 
 const HomePage = () => {
   return (
-    <Container maxWidth="lg">
+    <div className="container">
       <UploadFIleProgressBar />
-    </Container>
+    </div>
   );
 };
 

@@ -5,14 +5,13 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.15.12",
-    "@mui/material": "^5.15.12",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.17",
+    "@quark-uilib/components": "^1.13.1",
     "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
+    "classnames": "^2.5.1",
     "jwt-decode": "^4.0.0",
     "mobx": "^6.12.0",
     "mobx-react": "^9.1.0",
@@ -20,7 +19,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
-    "styled-components": "^6.1.8",
+    "sass": "^1.72.0",
+    "socket.io-client": "^4.7.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
