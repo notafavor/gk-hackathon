@@ -7,7 +7,6 @@ import {
 import Divider from "@mui/material/Divider";
 
 const TranscriptionItem = ({ item }) => {
-  console.log(item);
   return (
     <TranscriptionItemWrapper>
       <TranscriptionItemTitle>{item.speaker}</TranscriptionItemTitle>

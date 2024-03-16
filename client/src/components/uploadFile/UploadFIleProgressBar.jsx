@@ -68,9 +68,9 @@ const UploadFIleProgressBar = observer(() => {
       }
     };
     fetchFile();
-    const interval = setInterval(fetchFile, 10000);
+    // const interval = setInterval(fetchFile, 5000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   const handleFileInputClick = () => {
@@ -125,6 +125,7 @@ const UploadFIleProgressBar = observer(() => {
         }
       );
       const recognitions = await createRecognitions(response.data.id);
+      console.log(recognitions)
       setErrorModal(false);
       return recognitions;
     } catch (error) {

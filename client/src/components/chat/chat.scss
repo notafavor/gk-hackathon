@@ -1,0 +1,19 @@
+.chat-btn {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    align-items: center;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: inherit;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    svg {
+        fill: #0074d9;
+        margin-right: 8px;
+        width: 32px;
+    }
+}
