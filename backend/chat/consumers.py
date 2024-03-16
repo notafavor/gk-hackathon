@@ -8,6 +8,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         task = await database_sync_to_async(Recognition.objects.filter)(id=pk)
         await database_sync_to_async(task.update)(channel=self.channel_name)
         await self.accept()
+        await self.send_json({"msg": "hello world"})
 
     async def disconnect(self, close_code):
         pass
