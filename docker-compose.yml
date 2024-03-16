@@ -16,7 +16,8 @@ services:
     # backend
     build:
       context: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn -c file:gunicorn.py root.wsgi
     volumes:
       - ./backend/:/opt/app/
       - ./backend/media/:/opt/app/media/
