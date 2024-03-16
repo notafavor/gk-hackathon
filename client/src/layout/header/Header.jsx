@@ -41,7 +41,7 @@ const Header = observer(() => {
           </Button>
           {user.isAuth ? (
             <Button size="m" color="red" onClick={handleLogOut}>
-              Log out
+              Выйти
             </Button>
           ) : (
             <Button
@@ -51,7 +51,7 @@ const Header = observer(() => {
                 navigate(LOGIN_ROUTE);
               }}
             >
-              Sign In
+              Авторизоваться
             </Button>
           )}
         </HeaderContainerStyled>

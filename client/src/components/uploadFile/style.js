@@ -21,9 +21,6 @@ export const FileRow = styled.li`
   list-style: none;
   padding: 10px;
   border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
   i {
     color: #0086fe;
@@ -43,7 +40,7 @@ export const LoadFileDetails = styled.div`
   justify-content: space-between;
 
   .details-span {
-    font-size: 12px;
+    font-size: 18px;
   }
 `;
 
@@ -62,7 +59,11 @@ export const FileLoading = styled.div`
   border-radius: inherit;
 `;
 
-export const UploadFileContent = styled.div``;
+export const UploadFileContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 export const UploadFileDetails = styled.div`
   display: flex;
@@ -70,7 +71,7 @@ export const UploadFileDetails = styled.div`
   flex-direction: column;
 
   .details-span {
-    font-size: 12px;
+    font-size: 18px;
   }
 
   .size {

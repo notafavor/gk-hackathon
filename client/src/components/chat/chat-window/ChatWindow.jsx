@@ -3,16 +3,30 @@ import classnames from "classnames";
 import ChatMessage from "../chat-message/ChatMessage";
 import "./chat-window.scss";
 
-const ChatWindow = ({ isOpen, messages, onClose, position, title }) => {
+const ChatWindow = ({
+  isOpen,
+  messages,
+  onClose,
+  onMessageSent,
+  position,
+  title,
+}) => {
   const chatWindow = useRef();
   const chatWindowBody = useRef();
   const userInput = useRef();
 
+  const [ipAddress, setIpAddress] = useState(null);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
+
+  const handleSubmit = () => {
+    onMessageSent({ message, originIpAddress: ipAddress });
+    setMessage("");
+  };
+
   const setChatWindowScrollPosition = () => {
     const _chatWindowBody = chatWindowBody.current;
     _chatWindowBody.scrollTop = _chatWindowBody.scrollHeight;
@@ -64,26 +78,31 @@ const ChatWindow = ({ isOpen, messages, onClose, position, title }) => {
         </button>
       </div>
       <div ref={chatWindowBody} className="chat-window__body">
-        {messages.map(({ originIpAddress, ...props }) => {
-          return <ChatMessage key={Math.random()} message={props.msg} />;
-        })}
+        {messages.map(({ originIpAddress, ...props }) => (
+          <ChatMessage
+            key={Math.random()}
+            isSameOrigin={originIpAddress === ipAddress}
+            message={props.msg}
+            {...props}
+          />
+        ))}
       </div>
       <div className="chat-window__footer">
         <textarea
           ref={userInput}
           className="chat-window__input"
           rows="1"
-          placeholder="Enter your message..."
+          placeholder="Введите команду..."
           value={message}
           onChange={handleChange}
         />
         <button
           className="chat-window__send-btn"
           type="button"
-          // onClick={sendMessage}
+          onClick={() => handleSubmit()}
           disabled={!message}
         >
-          Send
+          Отправить
         </button>
       </div>
     </div>

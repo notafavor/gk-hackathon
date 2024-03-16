@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { LOGIN_ROUTE, TRANSCRIPTION_ROUTE } from "../../utils/constsRoute";
@@ -18,7 +18,7 @@ import {
 } from "./style";
 import { Link, useNavigate } from "react-router-dom";
 
-import { UploadDragFile } from "@quark-uilib/components";
+import { UploadDragFile, Preloader, Status } from "@quark-uilib/components";
 import { createRecognitions, fetchRecognitions } from "../../http/fileApi";
 
 const UploadFIleProgressBar = observer(() => {
@@ -136,7 +136,11 @@ const UploadFIleProgressBar = observer(() => {
         alignItems: "center",
       }}
     >
-      <UploadDragFile style={{ marginBottom: "30px" }} onChange={uploadFile} />
+      <UploadDragFile
+        isMultiple={false}
+        style={{ marginBottom: "30px" }}
+        onChange={uploadFile}
+      />
       {showProgress && (
         <LoadingArea>
           {files.map((file, index) => (
@@ -168,26 +172,38 @@ const UploadFIleProgressBar = observer(() => {
               {file.status === "pending" ? (
                 <>
                   <UploadFileContent className="upload">
-                    <i className="fas fa-file-alt"></i>
                     <UploadFileDetails>
-                      <span className="details-span name">{file.name}</span>
-                      <span className="details-span name">{formattedDate}</span>
-                      <span className="details-span name">{file.status}</span>
+                      <span className="details-span name">
+                        Имя файла: {file.name}
+                      </span>
+                      <span className="details-span name">
+                        Дата загрузки: {formattedDate}
+                      </span>
                     </UploadFileDetails>
+                    <Preloader type="star" />
                   </UploadFileContent>
                   <i className="fas fa-check"></i>
                 </>
               ) : (
-                <Link to={`${TRANSCRIPTION_ROUTE}/${file.id}`}>
-                  <UploadFileContent className="upload">
-                    <i className="fas fa-file-alt"></i>
-                    <UploadFileDetails>
-                      <span className="details-span name">{file.name}</span>
-                      <span className="details-span name">{formattedDate}</span>
-                      <span className="details-span name">{file.status}</span>
-                    </UploadFileDetails>
-                  </UploadFileContent>
-                </Link>
+                <UploadFileContent className="upload">
+                  <UploadFileDetails>
+                    <span className="details-span name">
+                      Имя файла: {file.name}
+                    </span>
+                    <span className="details-span name">
+                      Дата загрузки: {formattedDate}
+                    </span>
+                  </UploadFileDetails>
+                  <Status
+                    isFilled
+                    status="completed"
+                    onClick={() => {
+                      navigate(`${TRANSCRIPTION_ROUTE}/${file.id}`);
+                    }}
+                  >
+                    Обработан
+                  </Status>
+                </UploadFileContent>
               )}
             </FileRow>
           );

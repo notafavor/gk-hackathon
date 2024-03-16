@@ -13,7 +13,7 @@ const Chat = () => {
       `wss://team5.opvk.tech/chat/recognition/${id}/`
     );
 
-    socket.onopen = (event) => {
+    socket.onopen = () => {
       console.log("Connection Established!");
     };
 
@@ -37,8 +37,6 @@ const Chat = () => {
       }
     };
   }, []);
-
-  console.log(messages);
 
   const handleClose = () => {
     setIsOpen(false);
