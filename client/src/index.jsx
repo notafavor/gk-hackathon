@@ -3,8 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import UserStore from "./store/UserStore.js";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import "./assets/style/reset.css";
+import "@quark-uilib/components/styles/index.css";
+import "./assets/style/globalStyle.css";
 import { BrowserRouter } from "react-router-dom";
 
 export const Context = createContext(null);
@@ -16,13 +16,11 @@ root.render(
       user: new UserStore(),
     }}
   >
-    <GoogleOAuthProvider clientId="<your_client_id>">
-      <React.StrictMode>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </React.StrictMode>
-    </GoogleOAuthProvider>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
   </Context.Provider>
 );
 

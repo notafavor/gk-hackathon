@@ -3,8 +3,8 @@ import {
   TranscriptionItemText,
   TranscriptionItemTitle,
   TranscriptionItemWrapper,
+  Divider,
 } from "./style";
-import Divider from "@mui/material/Divider";
 
 const TranscriptionItem = ({ item }) => {
   return (
@@ -16,7 +16,7 @@ const TranscriptionItem = ({ item }) => {
       {/* <TranscriptionItemText className="home__text"> //TODO: стили накидать
         {item.timecode}
       </TranscriptionItemText> */}
-      <Divider className="divider" orientation="vertical" flexItem />
+      <Divider />
     </TranscriptionItemWrapper>
   );
 };

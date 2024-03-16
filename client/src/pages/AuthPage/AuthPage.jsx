@@ -1,24 +1,16 @@
 import React, { useContext, useState } from "react";
-import { Container, Typography } from "@mui/material";
 import { useLocation } from "react-router";
 import { observer } from "mobx-react-lite";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../index";
 import {
   HOME_ROUTE,
   LOGIN_ROUTE,
   REGISTRATION_ROUTE,
 } from "../../utils/constsRoute";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Form, Input } from "@quark-uilib/components";
 import { login, registration } from "../../http/userAPI";
+import { AuthFormWrapper, ButtonLogin } from "./style";
 
 const AuthPage = observer(() => {
   const { user } = useContext(Context);
@@ -29,10 +21,7 @@ const AuthPage = observer(() => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const defaultTheme = createTheme();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     try {
       let data;
       if (isLogin) {
@@ -49,91 +38,46 @@ const AuthPage = observer(() => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            {isLogin ? "Sign In" : "Sign up"}
-          </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+    <AuthFormWrapper>
+      <Form name="basic" className="form-login" onFinish={handleSubmit}>
+        <Form.Field name="username">
+          <Input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+          />
+        </Form.Field>
+        {!isLogin && (
+          <Form.Field name="email">
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="email"
             />
-            {!isLogin && (
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            )}
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {isLogin ? "Sign In" : "Sign up"}
-            </Button>
-            <Grid container>
-              <Grid item>
-                {isLogin ? (
-                  <Link href={REGISTRATION_ROUTE} variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                ) : (
-                  <Link href={LOGIN_ROUTE} variant="body2">
-                    {"Do you have an account? Sign In"}
-                  </Link>
-                )}
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+          </Form.Field>
+        )}
+        <Form.Field name="password">
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="password"
+          />
+        </Form.Field>
+
+        {isLogin ? (
+          <Link className="link-login" to={REGISTRATION_ROUTE}>
+            {"Don't have an account? Sign Up"}
+          </Link>
+        ) : (
+          <Link className="link-login" to={LOGIN_ROUTE}>
+            {"Do you have an account? Sign In"}
+          </Link>
+        )}
+        <ButtonLogin type="submit">Login</ButtonLogin>
+      </Form>
+    </AuthFormWrapper>
   );
 });
 

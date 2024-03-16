@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import AppRouter from "./components/AppRouter.jsx";
 import Header from "./layout/header/Header.jsx";
-import CircularProgress from "@mui/material/CircularProgress";
+import { Preloader } from "@quark-uilib/components";
 import { observer } from "mobx-react-lite";
 import { Context } from "./index.jsx";
 import { refreshToken } from "./http/userAPI.js";
 import { jwtDecode } from "jwt-decode";
+import { ScrollStyle } from "@quark-uilib/components";
 
 const App = observer(() => {
   const { user } = useContext(Context);
@@ -32,11 +33,12 @@ const App = observer(() => {
   }, []);
 
   if (loading) {
-    return <CircularProgress />;
+    return <Preloader progress={20} type="circular" />;
   }
 
   return (
     <>
+      <ScrollStyle />
       <Header />
       <main className={"main"}>
         <AppRouter />

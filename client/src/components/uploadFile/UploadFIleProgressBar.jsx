@@ -1,28 +1,25 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { ReactComponent as UploadIcon } from "../../assets/img/uploadFile.svg";
-import {
-  FileInput,
-  FileLoading,
-  FileLoadingBar,
-  FileRow,
-  Icon,
-  LoadFileContent,
-  LoadFileDetails,
-  LoadingArea,
-  UploadBox,
-  UploadFileContent,
-  UploadFileDetails,
-  UploadedArea,
-} from "./style";
-import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../..";
 import { LOGIN_ROUTE, TRANSCRIPTION_ROUTE } from "../../utils/constsRoute";
 import { jwtDecode } from "jwt-decode";
 import { $authHost } from "../../http";
 import { refreshToken } from "../../http/userAPI";
+import {
+  FileLoading,
+  FileLoadingBar,
+  FileRow,
+  LoadFileContent,
+  LoadFileDetails,
+  LoadingArea,
+  UploadFileContent,
+  UploadFileDetails,
+  UploadedArea,
+} from "./style";
+import { Link, useNavigate } from "react-router-dom";
+
+import { UploadDragFile } from "@quark-uilib/components";
 import { createRecognitions, fetchRecognitions } from "../../http/fileApi";
-import ModalWindow from "../ModalWindow";
 
 const UploadFIleProgressBar = observer(() => {
   const { user } = useContext(Context);
@@ -32,7 +29,6 @@ const UploadFIleProgressBar = observer(() => {
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showProgress, setShowProgress] = useState(false);
-  const fileInputRef = useRef(null);
 
   const handleClose = () => setErrorModal(false);
 
@@ -73,20 +69,14 @@ const UploadFIleProgressBar = observer(() => {
     // return () => clearInterval(interval);
   }, []);
 
-  const handleFileInputClick = () => {
-    if (!user.isAuth) {
-      navigate(LOGIN_ROUTE);
-      return;
-    }
-    fileInputRef.current.click();
-  };
-
   const uploadFile = async (event) => {
     if (!user.isAuth) {
       navigate(LOGIN_ROUTE);
       return;
     }
-    const file = event.target.files[0];
+
+    const file = event[0];
+
     if (!file) return;
 
     const fileName =
@@ -125,7 +115,6 @@ const UploadFIleProgressBar = observer(() => {
         }
       );
       const recognitions = await createRecognitions(response.data.id);
-      console.log(recognitions)
       setErrorModal(false);
       return recognitions;
     } catch (error) {
@@ -140,89 +129,74 @@ const UploadFIleProgressBar = observer(() => {
   };
 
   return (
-    <>
-      <UploadBox>
-        <p className="title">Upload your file</p>
-        <form className="upload-form" onClick={handleFileInputClick}>
-          <FileInput
-            className="file-input"
-            type="file"
-            hidden
-            ref={fileInputRef}
-            onChange={uploadFile}
-          />
-          <Icon>
-            <UploadIcon width="64px" height="64px" />
-          </Icon>
-          <p>Browser File to upload</p>
-        </form>
-        {showProgress && (
-          <LoadingArea>
-            {files.map((file, index) => (
-              <FileRow key={index}>
-                <i className="fas fa-file-alt"></i>
-                <LoadFileContent>
-                  <LoadFileDetails>
-                    <span className="details-span name">{`${file.name} - uploading`}</span>
-                    <span className="details-span percent">{`${file.loading}%`}</span>
-                    <FileLoadingBar>
-                      <FileLoading style={{ width: `${file.loading}%` }} />
-                    </FileLoadingBar>
-                  </LoadFileDetails>
-                </LoadFileContent>
-              </FileRow>
-            ))}
-          </LoadingArea>
-        )}
-        <UploadedArea>
-          {uploadedFiles.map((file, index) => {
-            const fileDate = new Date(file.date);
-            const formattedDate = fileDate.toLocaleDateString(undefined, {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            });
-            return (
-              <FileRow key={index}>
-                {file.status === "pending" ? (
-                  <>
-                    <UploadFileContent className="upload">
-                      <i className="fas fa-file-alt"></i>
-                      <UploadFileDetails>
-                        <span className="details-span name">{file.name}</span>
-                        <span className="details-span name">
-                          {formattedDate}
-                        </span>
-                        <span className="details-span name">{file.status}</span>
-                      </UploadFileDetails>
-                    </UploadFileContent>
-                    <i className="fas fa-check"></i>
-                  </>
-                ) : (
-                  <Link to={`${TRANSCRIPTION_ROUTE}/${file.id}`}>
-                    <UploadFileContent className="upload">
-                      <i className="fas fa-file-alt"></i>
-                      <UploadFileDetails>
-                        <span className="details-span name">{file.name}</span>
-                        <span className="details-span name">
-                          {formattedDate}
-                        </span>
-                        <span className="details-span name">{file.status}</span>
-                      </UploadFileDetails>
-                    </UploadFileContent>
-                  </Link>
-                )}
-              </FileRow>
-            );
-          })}
-        </UploadedArea>
-      </UploadBox>
-      <ModalWindow
-        isOpen={errorModal}
-        handleClose={handleClose}
-        errorText={errorText}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <UploadDragFile
+        style={{ marginBottom: "30px" }}
+        onClick={uploadFile}
       />
-    </>
+      {showProgress && (
+        <LoadingArea>
+          {files.map((file, index) => (
+            <FileRow key={index}>
+              <i className="fas fa-file-alt"></i>
+              <LoadFileContent>
+                <LoadFileDetails>
+                  <span className="details-span name">{`${file.name} - uploading`}</span>
+                  <span className="details-span percent">{`${file.loading}%`}</span>
+                  <FileLoadingBar>
+                    <FileLoading style={{ width: `${file.loading}%` }} />
+                  </FileLoadingBar>
+                </LoadFileDetails>
+              </LoadFileContent>
+            </FileRow>
+          ))}
+        </LoadingArea>
+      )}
+      <UploadedArea>
+        {uploadedFiles.map((file, index) => {
+          const fileDate = new Date(file.date);
+          const formattedDate = fileDate.toLocaleDateString(undefined, {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          });
+          return (
+            <FileRow key={index}>
+              {file.status === "pending" ? (
+                <>
+                  <UploadFileContent className="upload">
+                    <i className="fas fa-file-alt"></i>
+                    <UploadFileDetails>
+                      <span className="details-span name">{file.name}</span>
+                      <span className="details-span name">{formattedDate}</span>
+                      <span className="details-span name">{file.status}</span>
+                    </UploadFileDetails>
+                  </UploadFileContent>
+                  <i className="fas fa-check"></i>
+                </>
+              ) : (
+                <Link to={`${TRANSCRIPTION_ROUTE}/${file.id}`}>
+                  <UploadFileContent className="upload">
+                    <i className="fas fa-file-alt"></i>
+                    <UploadFileDetails>
+                      <span className="details-span name">{file.name}</span>
+                      <span className="details-span name">{formattedDate}</span>
+                      <span className="details-span name">{file.status}</span>
+                    </UploadFileDetails>
+                  </UploadFileContent>
+                </Link>
+              )}
+            </FileRow>
+          );
+        })}
+      </UploadedArea>
+    </div>
   );
 });
 

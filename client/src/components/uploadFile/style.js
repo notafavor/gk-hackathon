@@ -1,45 +1,14 @@
 import styled from "styled-components";
 
-export const UploadBox = styled.div`
-  background: #fff;
-  border-radius: 5px;
-  padding: 15px;
-  box-shadow: 7px 7px 12px rgba(0, 0, 0, 0.05);
-
-  .title {
-    text-align: center;
-    font-weight: 500;
-    margin-top: 10px;
-  }
-
-  .upload-form {
-    height: 170px;
-    display: flex;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    border-radius: 5px;
-    border: 2px dashed #0086fe;
-
-    & :where(p) {
-      color: #0086fe;
-      margin-top: 15px;
-      font-size: 16px;
-    }
-  }
-`;
-
-export const FileInput = styled.input``;
-
 export const Icon = styled.div``;
 
-export const LoadingArea = styled.div``;
+export const LoadingArea = styled.div`
+  width: -webkit-fill-available;
+`;
 
 export const UploadedArea = styled.div`
   overflow-y: scroll;
+  width: -webkit-fill-available;
 
   &::-webkit-scrollbar {
     width: 0%;

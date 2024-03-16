@@ -1,7 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
+import io from "socket.io-client";
 import classnames from "classnames";
 import ChatMessage from "../chat-message/ChatMessage";
 import "./chat-window.scss";
+
+// const socket = io("https://team5.opvk.tech/");
 
 const ChatWindow = ({
   isOpen,
@@ -15,17 +18,28 @@ const ChatWindow = ({
   const chatWindowBody = useRef();
   const userInput = useRef();
 
-  const [message, setValue] = useState("");
+  const [message, setMessage] = useState("");
   const [ipAddress, setIpAddress] = useState(null);
 
+  // useEffect(() => {
+  //   socket.on("message", (message) => {
+  //     setMessage([...messages, message]);
+  //   });
+  // }, [messages]);
+
+  // const sendMessage = () => {
+  //   socket.emit("sendMessage", { text: message });
+  //   setMessage("");
+  // };
+
   const handleChange = (e) => {
-    setValue(e.target.value);
+    setMessage(e.target.value);
   };
 
-  const handleSubmit = () => {
-    onMessageSent({ message, originIpAddress: ipAddress });
-    setValue("");
-  };
+  // const handleSubmit = () => {
+  //   onMessageSent({ message, originIpAddress: ipAddress });
+  //   setMessage("");
+  // };
 
   const setChatWindowScrollPosition = () => {
     const _chatWindowBody = chatWindowBody.current;
@@ -98,7 +112,7 @@ const ChatWindow = ({
         <button
           className="chat-window__send-btn"
           type="button"
-          onClick={() => handleSubmit()}
+          // onClick={sendMessage}
           disabled={!message}
         >
           Send

@@ -33,5 +33,15 @@ export const TranscriptionItemText = styled.div`
   letter-spacing: 0.35px;
   line-height: 32px;
   height: fit-content;
+  margin-right: auto;
   color: #202939 !important;
+`;
+
+export const Divider = styled.div`
+  width: 1px;
+  display: flex;
+  align-self: stretch;
+  min-height: 1em;
+  background-color: currentcolor;
+  opacity: 0.25;
 `;
