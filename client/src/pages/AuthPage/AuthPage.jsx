@@ -8,9 +8,9 @@ import {
   LOGIN_ROUTE,
   REGISTRATION_ROUTE,
 } from "../../utils/constsRoute";
-import { Form, Input } from "@quark-uilib/components";
+import { Form, Input, Button } from "@quark-uilib/components";
 import { login, registration } from "../../http/userAPI";
-import { AuthFormWrapper, ButtonLogin } from "./style";
+import "./style.scss";
 
 const AuthPage = observer(() => {
   const { user } = useContext(Context);
@@ -38,7 +38,7 @@ const AuthPage = observer(() => {
   };
 
   return (
-    <AuthFormWrapper>
+    <div className="AuthFormWrapper">
       <Form name="basic" className="form-login" onFinish={handleSubmit}>
         <Form.Field name="username">
           <Input
@@ -76,12 +76,16 @@ const AuthPage = observer(() => {
           </Link>
         )}
         {isLogin ? (
-          <ButtonLogin type="submit">Войти</ButtonLogin>
+          <Button className="ButtonLogin" type="submit">
+            Войти
+          </Button>
         ) : (
-          <ButtonLogin type="submit">Зарегистрироваться</ButtonLogin>
+          <Button className="ButtonLogin" type="submit">
+            Зарегистрироваться
+          </Button>
         )}
       </Form>
-    </AuthFormWrapper>
+    </div>
   );
 });
 

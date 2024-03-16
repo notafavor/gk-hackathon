@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import TranscriptionItem from "./TranscriptionItem";
 import { observer } from "mobx-react-lite";
-import { TranscriptionListStyle } from "./style";
+import "./style.scss";
 import { fetchRecognitionsOne } from "../../http/fileApi";
 import { useParams } from "react-router-dom";
 import { Context } from "../..";
@@ -25,10 +25,10 @@ export const TranscriptionList = observer(() => {
   }, []);
 
   return (
-    <TranscriptionListStyle>
+    <div className="TranscriptionListStyle">
       {recognition.recognition.map((item) => (
         <TranscriptionItem key={item.id} item={item} />
       ))}
-    </TranscriptionListStyle>
+    </div>
   );
 });

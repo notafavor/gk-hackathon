@@ -1,0 +1,14 @@
+$padding: 24px;
+$marginBottom: 10px;
+
+.HeaderStyled {
+    padding: $padding 0;
+    width: 100%;
+}
+
+.HeaderContainerStyled {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $marginBottom;
+}

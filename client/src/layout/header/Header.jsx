@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { HeaderContainerStyled, HeaderStyled } from "./style";
+import "./style.scss";
 import { observer } from "mobx-react-lite";
 import { HOME_ROUTE, LOGIN_ROUTE } from "../../utils/constsRoute";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +33,9 @@ const Header = observer(() => {
   };
 
   return (
-    <HeaderStyled>
+    <header className="HeaderStyled">
       <div className="container">
-        <HeaderContainerStyled>
+        <div className="HeaderContainerStyled">
           <Button size="l" viewType="link" onClick={() => navigate(HOME_ROUTE)}>
             Стенографист
           </Button>
@@ -54,10 +54,10 @@ const Header = observer(() => {
               Авторизоваться
             </Button>
           )}
-        </HeaderContainerStyled>
+        </div>
       </div>
       <Divider />
-    </HeaderStyled>
+    </header>
   );
 });
 

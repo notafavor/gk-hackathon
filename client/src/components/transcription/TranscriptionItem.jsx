@@ -1,23 +1,16 @@
 import React from "react";
-import {
-  TranscriptionItemText,
-  TranscriptionItemTitle,
-  TranscriptionItemWrapper,
-  Divider,
-} from "./style";
+import "./style.scss";
 
 const TranscriptionItem = ({ item }) => {
   return (
-    <TranscriptionItemWrapper>
-      <TranscriptionItemTitle>{item.speaker}</TranscriptionItemTitle>
-      <TranscriptionItemText className="home__text">
-        {item.msg}
-      </TranscriptionItemText>
+    <div className="TranscriptionItemWrapper">
+      <div className="TranscriptionItemTitle">{item.speaker}</div>
+      <div className="TranscriptionItemText home__text">{item.msg}</div>
       {/* <TranscriptionItemText className="home__text"> //TODO: стили накидать
         {item.timecode}
       </TranscriptionItemText> */}
-      <Divider />
-    </TranscriptionItemWrapper>
+      <div className="Divider" />
+    </div>
   );
 };
 
