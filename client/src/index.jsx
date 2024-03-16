@@ -6,6 +6,7 @@ import UserStore from "./store/UserStore.js";
 import "@quark-uilib/components/styles/index.css";
 import "./assets/style/globalStyle.css";
 import { BrowserRouter } from "react-router-dom";
+import RecognitionStore from "./store/RecognitionStore.js";
 
 export const Context = createContext(null);
 
@@ -14,6 +15,7 @@ root.render(
   <Context.Provider
     value={{
       user: new UserStore(),
+      recognition: new RecognitionStore()
     }}
   >
     <React.StrictMode>

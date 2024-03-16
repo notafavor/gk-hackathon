@@ -37,7 +37,7 @@ const Header = observer(() => {
       <div className="container">
         <HeaderContainerStyled>
           <Button size="l" viewType="link" onClick={() => navigate(HOME_ROUTE)}>
-            Зеленый треугольник
+            Стенографист
           </Button>
           {user.isAuth ? (
             <Button size="m" color="red" onClick={handleLogOut}>

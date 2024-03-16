@@ -84,7 +84,7 @@ const Chat = () => {
         messages={messages}
         onClose={handleClose}
         onMessageSent={handleMessageSent}
-        title="My Messages"
+        title="Чат"
       />
     </>
   );

@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import TranscriptionItem from "./TranscriptionItem";
+import { observer } from "mobx-react-lite";
 import { TranscriptionListStyle } from "./style";
 import { fetchRecognitionsOne } from "../../http/fileApi";
 import { useParams } from "react-router-dom";
+import { Context } from "../..";
 
-export const TranscriptionList = () => {
-  const [recognition, setRecognition] = useState([]);
+export const TranscriptionList = observer(() => {
+  const { recognition } = useContext(Context);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchRecognition = async () => {
       try {
         const data = await fetchRecognitionsOne(id);
-        setRecognition(data.result);
+        recognition.setRecognition(data.result);
+        recognition.setChanel(data.chanel);
       } catch (error) {
         console.error(error);
       }
@@ -23,9 +26,9 @@ export const TranscriptionList = () => {
 
   return (
     <TranscriptionListStyle>
-      {recognition.map((item) => (
+      {recognition.recognition.map((item) => (
         <TranscriptionItem key={item.id} item={item} />
       ))}
     </TranscriptionListStyle>
   );
-};
+});

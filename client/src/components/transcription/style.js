@@ -4,6 +4,7 @@ export const TranscriptionListStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+  padding-bottom: 50px
 `;
 
 export const TranscriptionItemWrapper = styled.div`

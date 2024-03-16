@@ -44,7 +44,7 @@ const AuthPage = observer(() => {
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="username"
+            placeholder="Имя"
           />
         </Form.Field>
         {!isLogin && (
@@ -53,7 +53,7 @@ const AuthPage = observer(() => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
-              placeholder="email"
+              placeholder="Почта"
             />
           </Form.Field>
         )}
@@ -62,20 +62,24 @@ const AuthPage = observer(() => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
-            placeholder="password"
+            placeholder="Пароль"
           />
         </Form.Field>
 
         {isLogin ? (
           <Link className="link-login" to={REGISTRATION_ROUTE}>
-            {"Don't have an account? Sign Up"}
+            {"У вас нет аккаунта? Зарегистрируйтесь"}
           </Link>
         ) : (
           <Link className="link-login" to={LOGIN_ROUTE}>
-            {"Do you have an account? Sign In"}
+            {"У вас есть аккаунт? Войдите"}
           </Link>
         )}
-        <ButtonLogin type="submit">Login</ButtonLogin>
+        {isLogin ? (
+          <ButtonLogin type="submit">Войти</ButtonLogin>
+        ) : (
+          <ButtonLogin type="submit">Зарегистрироваться</ButtonLogin>
+        )}
       </Form>
     </AuthFormWrapper>
   );

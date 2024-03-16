@@ -16,21 +16,17 @@ import {
   UploadFileDetails,
   UploadedArea,
 } from "./style";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { UploadDragFile, Preloader, Status } from "@quark-uilib/components";
+import { UploadDragFile, Preloader, Button } from "@quark-uilib/components";
 import { createRecognitions, fetchRecognitions } from "../../http/fileApi";
 
 const UploadFIleProgressBar = observer(() => {
   const { user } = useContext(Context);
   const navigate = useNavigate();
-  const [errorModal, setErrorModal] = useState(false);
-  const [errorText, setErrorText] = useState("");
   const [files, setFiles] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showProgress, setShowProgress] = useState(false);
-
-  const handleClose = () => setErrorModal(false);
 
   useEffect(() => {
     const fetchFile = async () => {
@@ -81,7 +77,7 @@ const UploadFIleProgressBar = observer(() => {
 
     const fileName =
       file.name.length > 20
-        ? `${file.name.substring(0, 21)}... .${file.name.split(".")[1]}`
+        ? `${file.name.substring(0, 31)}...`
         : file.name;
 
     let accessToken = localStorage.getItem("accessToken");
@@ -114,16 +110,13 @@ const UploadFIleProgressBar = observer(() => {
           },
         }
       );
-      const recognitions = await createRecognitions(response.data.id);
-      setErrorModal(false);
+      const recognitions = await createRecognitions(response.data.id)
       return recognitions;
     } catch (error) {
       if (error.response && error.response.status === 401) {
         await refreshToken();
         return uploadFile(event);
       }
-      setErrorText(error.response.data.file[0]);
-      setErrorModal(true);
       console.error(error);
     }
   };
@@ -194,15 +187,15 @@ const UploadFIleProgressBar = observer(() => {
                       Дата загрузки: {formattedDate}
                     </span>
                   </UploadFileDetails>
-                  <Status
-                    isFilled
-                    status="completed"
+                  <Button
+                    color="green"
+                    size="s"
                     onClick={() => {
                       navigate(`${TRANSCRIPTION_ROUTE}/${file.id}`);
                     }}
                   >
                     Обработан
-                  </Status>
+                  </Button>
                 </UploadFileContent>
               )}
             </FileRow>
