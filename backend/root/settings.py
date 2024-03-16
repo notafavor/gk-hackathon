@@ -19,6 +19,7 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 
 APPS = [
     "api",
+    "chat"
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + APPS
@@ -167,7 +169,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # SSL
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("X-FORWARDED-PROTO", "https")
-CSRF_TRUSTED_ORIGINS = ["https://*.opvk.tech", "http://localhost:3000", "http://api", "http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = ["https://*.opvk.tech", "http://localhost:3000", "http://api"]
 CSRF_COOKIE_SECURE = True
 
 # SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -189,3 +191,14 @@ CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "django-db"
 # DEVELOP Mode
 IS_DEVELOP = os.environ.get("IS_DEVELOP", False)
+
+# websockets
+ASGI_APPLICATION = "chat.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis://redis:6379")],
+        },
+    },
+}
