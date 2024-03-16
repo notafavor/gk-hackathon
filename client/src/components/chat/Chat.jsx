@@ -1,11 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatWindow from "./chat-window/ChatWindow";
-import messageDate from "../../utils/messages.json";
+import { useParams } from "react-router-dom";
 import "./chat.scss";
 
 const Chat = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState(messageDate);
+  const [messages, setMessages] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const socket = new WebSocket(
+      `wss://team5.opvk.tech/chat/recognition/${id}/`
+    );
+
+    socket.onopen = (event) => {
+      console.log("Connection Established!");
+    };
+
+    socket.onmessage = (event) => {
+      const receivedMessage = JSON.parse(event.data);
+      console.log("message");
+      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+    };
+
+    socket.onclose = () => {
+      console.log("Connection Closed!");
+    };
+
+    return () => {
+      if (socket.readyState === 1) {
+        socket.close();
+      } else {
+        socket.addEventListener("open", () => {
+          socket.close();
+        });
+      }
+    };
+  }, []);
+
+  console.log(messages);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -14,6 +47,17 @@ const Chat = () => {
   const handleMessageSent = (message) => {
     setMessages([...messages, { ...message }]);
   };
+
+  // const handleMessageSent = (message) => {
+  //   if (messageInput.trim() !== "") {
+  //     const message = {
+  //       text: messageInput,
+  //       timestamp: new Date().toISOString(),
+  //     };
+  //     socket.send(JSON.stringify(message));
+  //     setMessageInput("");
+  //   }
+  // };
 
   return (
     <>

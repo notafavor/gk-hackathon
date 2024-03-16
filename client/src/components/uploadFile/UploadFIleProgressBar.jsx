@@ -136,10 +136,7 @@ const UploadFIleProgressBar = observer(() => {
         alignItems: "center",
       }}
     >
-      <UploadDragFile
-        style={{ marginBottom: "30px" }}
-        onClick={uploadFile}
-      />
+      <UploadDragFile style={{ marginBottom: "30px" }} onChange={uploadFile} />
       {showProgress && (
         <LoadingArea>
           {files.map((file, index) => (
