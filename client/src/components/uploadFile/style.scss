@@ -1,0 +1,104 @@
+$blue: #0086fe;
+$lightBlue: #d5ebff;
+$gray: #404040;
+$white: #fff;
+
+
+.LoadingArea {
+    width: 100%;
+}
+
+.UploadedArea {
+    overflow-y: scroll;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 0%;
+    }
+}
+
+.FileRow {
+    margin-bottom: 10px;
+    background: $lightBlue;
+    list-style: none;
+    padding: 10px;
+    border-radius: 10px;
+    height: 64px;
+
+    i {
+        color: $blue;
+        font-size: 30px;
+    }
+}
+
+.FileRowLoader {
+    margin-bottom: 10px;
+    background: $lightBlue;
+    list-style: none;
+    padding: 10px;
+    border-radius: 10px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+
+    i {
+        color: $blue;
+        font-size: 30px;
+    }
+}
+
+.LoadFileContent {
+    width: 100%;
+    margin-left: 15px;
+}
+
+.LoadFileDetails {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+    justify-content: space-between;
+
+    .details-span {
+        font-size: 18px;
+    }
+}
+
+.FileLoadingBar {
+    height: 6px;
+    width: 100%;
+    margin-bottom: 4px;
+    background: $white;
+    border-radius: 30px;
+}
+
+.FileLoading {
+    height: 100%;
+    width: 10%;
+    background: $blue;
+    border-radius: inherit;
+}
+
+.UploadFileContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.UploadFileDetails {
+    display: flex;
+    margin-left: 15px;
+    flex-direction: column;
+
+    .details-span {
+        font-size: 18px;
+    }
+
+    .size {
+        color: $gray;
+        font-size: 11px;
+    }
+
+    i.fa-cehck {
+        font-size: 16px;
+    }
+}

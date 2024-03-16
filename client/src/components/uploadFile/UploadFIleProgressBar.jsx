@@ -5,20 +5,15 @@ import { LOGIN_ROUTE, TRANSCRIPTION_ROUTE } from "../../utils/constsRoute";
 import { jwtDecode } from "jwt-decode";
 import { $authHost } from "../../http";
 import { refreshToken } from "../../http/userAPI";
-import {
-  FileLoading,
-  FileLoadingBar,
-  FileRow,
-  LoadFileContent,
-  LoadFileDetails,
-  LoadingArea,
-  UploadFileContent,
-  UploadFileDetails,
-  UploadedArea,
-} from "./style";
+import "./style.scss";
 import { useNavigate } from "react-router-dom";
 
-import { UploadDragFile, Preloader, Button } from "@quark-uilib/components";
+import {
+  UploadDragFile,
+  Preloader,
+  Button,
+  ProgressBar,
+} from "@quark-uilib/components";
 import { createRecognitions, fetchRecognitions } from "../../http/fileApi";
 
 const UploadFIleProgressBar = observer(() => {
@@ -60,9 +55,9 @@ const UploadFIleProgressBar = observer(() => {
       }
     };
     fetchFile();
-    // const interval = setInterval(fetchFile, 5000);
+    const interval = setInterval(fetchFile, 5000);
 
-    // return () => clearInterval(interval);
+    return () => clearInterval(interval);
   }, []);
 
   const uploadFile = async (event) => {
@@ -77,7 +72,7 @@ const UploadFIleProgressBar = observer(() => {
 
     const fileName =
       file.name.length > 20
-        ? `${file.name.substring(0, 31)}...`
+        ? `${file.name.substring(0, 21)}... .${file.name.split(".")[1]}`
         : file.name;
 
     let accessToken = localStorage.getItem("accessToken");
@@ -110,7 +105,7 @@ const UploadFIleProgressBar = observer(() => {
           },
         }
       );
-      const recognitions = await createRecognitions(response.data.id)
+      const recognitions = await createRecognitions(response.data.id);
       return recognitions;
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -135,24 +130,25 @@ const UploadFIleProgressBar = observer(() => {
         onChange={uploadFile}
       />
       {showProgress && (
-        <LoadingArea>
+        <div className="LoadingArea">
           {files.map((file, index) => (
-            <FileRow key={index}>
-              <i className="fas fa-file-alt"></i>
-              <LoadFileContent>
-                <LoadFileDetails>
+            <li className="FileRowLoader" key={index}>
+              <div className="LoadFileContent">
+                <div className="LoadFileDetails">
                   <span className="details-span name">{`${file.name} - uploading`}</span>
-                  <span className="details-span percent">{`${file.loading}%`}</span>
-                  <FileLoadingBar>
-                    <FileLoading style={{ width: `${file.loading}%` }} />
-                  </FileLoadingBar>
-                </LoadFileDetails>
-              </LoadFileContent>
-            </FileRow>
+                  <ProgressBar
+                    key={index}
+                    progress={file.loading}
+                    size="m"
+                    isText
+                  />
+                </div>
+              </div>
+            </li>
           ))}
-        </LoadingArea>
+        </div>
       )}
-      <UploadedArea>
+      <div className="UploadedArea">
         {uploadedFiles.map((file, index) => {
           const fileDate = new Date(file.date);
           const formattedDate = fileDate.toLocaleDateString(undefined, {
@@ -161,32 +157,32 @@ const UploadFIleProgressBar = observer(() => {
             year: "numeric",
           });
           return (
-            <FileRow key={index}>
+            <li className="FileRow" key={index}>
               {file.status === "pending" ? (
                 <>
-                  <UploadFileContent className="upload">
-                    <UploadFileDetails>
+                  <div className="UploadFileContent upload">
+                    <div className="UploadFileDetails">
                       <span className="details-span name">
                         Имя файла: {file.name}
                       </span>
                       <span className="details-span name">
                         Дата загрузки: {formattedDate}
                       </span>
-                    </UploadFileDetails>
+                    </div>
                     <Preloader type="star" />
-                  </UploadFileContent>
+                  </div>
                   <i className="fas fa-check"></i>
                 </>
               ) : (
-                <UploadFileContent className="upload">
-                  <UploadFileDetails>
+                <div className="UploadFileContent upload">
+                  <div className="UploadFileDetails">
                     <span className="details-span name">
                       Имя файла: {file.name}
                     </span>
                     <span className="details-span name">
                       Дата загрузки: {formattedDate}
                     </span>
-                  </UploadFileDetails>
+                  </div>
                   <Button
                     color="green"
                     size="s"
@@ -196,12 +192,12 @@ const UploadFIleProgressBar = observer(() => {
                   >
                     Обработан
                   </Button>
-                </UploadFileContent>
+                </div>
               )}
-            </FileRow>
+            </li>
           );
         })}
-      </UploadedArea>
+      </div>
     </div>
   );
 });
