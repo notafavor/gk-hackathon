@@ -1,46 +1,18 @@
 import React, { useRef, useState, useEffect } from "react";
-import io from "socket.io-client";
 import classnames from "classnames";
 import ChatMessage from "../chat-message/ChatMessage";
 import "./chat-window.scss";
 
-// const socket = io("https://team5.opvk.tech/");
-
-const ChatWindow = ({
-  isOpen,
-  messages,
-  onClose,
-  onMessageSent,
-  position,
-  title,
-}) => {
+const ChatWindow = ({ isOpen, messages, onClose, position, title }) => {
   const chatWindow = useRef();
   const chatWindowBody = useRef();
   const userInput = useRef();
 
   const [message, setMessage] = useState("");
-  const [ipAddress, setIpAddress] = useState(null);
-
-  // useEffect(() => {
-  //   socket.on("message", (message) => {
-  //     setMessage([...messages, message]);
-  //   });
-  // }, [messages]);
-
-  // const sendMessage = () => {
-  //   socket.emit("sendMessage", { text: message });
-  //   setMessage("");
-  // };
 
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
-
-  // const handleSubmit = () => {
-  //   onMessageSent({ message, originIpAddress: ipAddress });
-  //   setMessage("");
-  // };
-
   const setChatWindowScrollPosition = () => {
     const _chatWindowBody = chatWindowBody.current;
     _chatWindowBody.scrollTop = _chatWindowBody.scrollHeight;
@@ -92,13 +64,9 @@ const ChatWindow = ({
         </button>
       </div>
       <div ref={chatWindowBody} className="chat-window__body">
-        {messages.map(({ originIpAddress, ...props }) => (
-          <ChatMessage
-            key={Math.random()}
-            isSameOrigin={originIpAddress === ipAddress}
-            {...props}
-          />
-        ))}
+        {messages.map(({ originIpAddress, ...props }) => {
+          return <ChatMessage key={Math.random()} message={props.msg} />;
+        })}
       </div>
       <div className="chat-window__footer">
         <textarea
