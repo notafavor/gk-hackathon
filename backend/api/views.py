@@ -24,6 +24,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class RecognitionViewSet(PotectedViewMixin, viewsets.ModelViewSet):
     queryset = models.Recognition.objects.all()
     serializer_class = serializers.RecognitionSerializer
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     send_channel_message(instance.channel, {"msg": "test"})
+    #     return super().retrieve(request, *args, **kwargs)
 
 
 class FileViewSet(PotectedViewMixin, viewsets.ModelViewSet):
