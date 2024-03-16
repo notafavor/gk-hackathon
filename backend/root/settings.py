@@ -169,7 +169,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # SSL
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("X-FORWARDED-PROTO", "https")
-CSRF_TRUSTED_ORIGINS = ["https://*.opvk.tech", "http://localhost:3000", "http://api", "http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = ["https://*.opvk.tech", "http://localhost:3000", "http://api"]
 CSRF_COOKIE_SECURE = True
 
 # SECURE_CONTENT_TYPE_NOSNIFF = True
