@@ -8,10 +8,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         task = await database_sync_to_async(Recognition.objects.filter)(id=pk)
         await database_sync_to_async(task.update)(channel=self.channel_name)
         await self.accept()
-        await self.send_json({"msg": "hello world"})
-        await self.send_json({"msg": "hello world1"})
-        await self.send_json({"msg": "hello world2"})
-        await self.send_json({"msg": "hello world3"})
+        await self.send_json({"type": "chat_message", "msg": "Доступные команды:"})
+        await self.send_json({"type": "chat_message", "msg": "/summary - резюмировать итоги встречи"})
+        await self.send_json({"type": "chat_message", "msg": "/print - протокол встречи в формате .doc"})
+        await self.send_json({"type": "chat_message", "msg": "/tasks - резюмировать поручения"})
+        await self.send_json({"type": "chat_message", "msg": "/rename <source> <dst> - переименовать спикера"})
 
     async def disconnect(self, close_code):
         pass
@@ -21,4 +22,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         pass
 
     async def chat_message(self, event):
+        # chat msg type
+        await self.send_json(event)
+
+    async def file(self, event):
+        # file type
         await self.send_json(event)

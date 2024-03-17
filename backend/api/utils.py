@@ -5,8 +5,10 @@ from rest_framework.response import Response
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from celery.result import AsyncResult
+import moviepy.editor as mp
 
 USER_MODEL = get_user_model()
+WAV_FORMAT = '.wav'
 
 
 def get_file_path(instance, filename):
@@ -29,3 +31,13 @@ from asgiref.sync import async_to_sync
 def send_channel_message(channel_name, message):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.send)(channel_name, message)
+
+def convert_to_wav(file_path):
+    import moviepy.editor as mp
+    clip = mp.VideoFileClip(file_path)
+    path, filenamne = os.path.split(file_path)
+    basename, ext = os.path.splitext(filenamne)
+    new_path = os.path.join(path, basename + WAV_FORMAT)
+    clip.audio.write_audiofile(new_path)
+    return new_path
+    

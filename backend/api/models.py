@@ -24,7 +24,9 @@ class BaseProtected(models.Model):
 
 class File(BaseProtected):
     file = models.FileField(
-        verbose_name="Файл", upload_to=get_file_path, validators=[FileExtensionValidator(allowed_extensions=["wav"])]
+        verbose_name="Файл",
+        upload_to=get_file_path,
+        validators=[FileExtensionValidator(allowed_extensions=["wav", "mp4"])],
     )
     name = models.CharField("Имя файла", max_length=255, null=True, blank=True)
 
@@ -36,8 +38,7 @@ class File(BaseProtected):
         return "%s %s" % (super().__str__(), self.name)
 
     def save(self, *args, **kwargs):
-        if not self.name:
-            self.name = os.path.basename(self.file.name)
+        self.name = os.path.basename(self.file.name)
         return super().save(*args, **kwargs)
 
 
@@ -58,14 +59,17 @@ class Recognition(BaseProtected):
         "Статус", max_length=255, choices=RecognitionChoices.choices, default=RecognitionChoices.PENDING
     )
     result = models.JSONField(verbose_name="Реузльтат распознавания", null=True, blank=True)
+    tasks = models.JSONField(verbose_name="Поручения", null=True, blank=True)
+    summary = models.TextField("Итоги встречи", null=True, blank=True)
     channel = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = "Запрос на распознавание"
         verbose_name_plural = "Запросы на распазнвание"
-    
+
     def save(self, *args, **kwargs):
         from .tasks import recognition_task
+
         created = self.pk is None
         super().save(*args, **kwargs)
         if created:

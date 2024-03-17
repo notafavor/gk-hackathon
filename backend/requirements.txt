@@ -66,3 +66,4 @@ wcwidth==0.2.13
 wheel==0.42.0
 zope.event==5.0
 zope.interface==6.2
+moviepy==1.0.3
