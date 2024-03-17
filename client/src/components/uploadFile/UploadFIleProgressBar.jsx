@@ -152,7 +152,6 @@ const UploadFIleProgressBar = observer(() => {
       )}
       <div className="UploadedArea">
         {uploadedFiles.map((file, index) => {
-          console.log(file.status);
           const fileDate = new Date(file.date);
           const formattedDate = fileDate.toLocaleDateString(undefined, {
             day: "numeric",

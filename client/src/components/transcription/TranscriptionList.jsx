@@ -12,16 +12,19 @@ export const TranscriptionList = observer(() => {
 
   useEffect(() => {
     const fetchRecognition = async () => {
+      recognition.setChannel("");
       try {
         const data = await fetchRecognitionsOne(id);
         recognition.setRecognition(data.result);
         recognition.setChannel(data.channel);
+        recognition.setFetchWebSocket(true);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchRecognition();
+    recognition.setFetchWebSocket(false);
   }, []);
 
   return (

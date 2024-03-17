@@ -83,7 +83,6 @@ const ChatWindow = observer(
         </div>
         <div ref={chatWindowBody} className="chat-window__body">
           {messages.map(({ originIpAddress, ...props }) => {
-            // console.log({...props})
             return (
               <ChatMessage
                 key={Math.random()}

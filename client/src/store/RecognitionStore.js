@@ -4,6 +4,7 @@ export default class RecognitionStore {
   constructor() {
     this._recognition = [];
     this._channel = "";
+    this._fetchWebSocket = true;
     makeAutoObservable(this);
   }
 
@@ -21,5 +22,13 @@ export default class RecognitionStore {
 
   get channel() {
     return this._channel;
+  }
+
+  setFetchWebSocket(fetchWebSocket) {
+    this._fetchWebSocket = fetchWebSocket;
+  }
+
+  get fetchWebSocket() {
+    return this._fetchWebSocket;
   }
 }
