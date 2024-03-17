@@ -1,38 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ChatWindow from "./chat-window/ChatWindow";
 import { useParams } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { Context } from "../..";
 import "./chat.scss";
 
-const Chat = () => {
+const Chat = observer(() => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const { id } = useParams();
+  const { recognition } = useContext(Context);
 
   useEffect(() => {
-    const socket = new WebSocket(
-      `wss://team5.opvk.tech/chat/recognition/${id}/`
-    );
+    if (recognition.fetchWebSocket === false) {
+      const socket = new WebSocket(
+        `wss://team5.opvk.tech/chat/recognition/${id}/`
+      );
 
-    socket.onopen = () => {};
+      socket.onopen = () => {};
 
-    socket.onmessage = (event) => {
-      const receivedMessage = JSON.parse(event.data);
-      console.log(receivedMessage);
-      setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-    };
+      socket.onmessage = (event) => {
+        const receivedMessage = JSON.parse(event.data);
+        console.log("onmessage");
+        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      };
 
-    socket.onclose = () => {};
+      socket.onclose = () => {};
 
-    return () => {
-      if (socket.readyState === 1) {
-        socket.close();
-      } else {
-        socket.addEventListener("open", () => {
+      return () => {
+        if (socket.readyState === 1) {
           socket.close();
-        });
-      }
-    };
+        } else {
+          socket.addEventListener("open", () => {
+            socket.close();
+          });
+        }
+      };
+    }
   }, []);
+
+  console.log(messages);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -73,6 +80,6 @@ const Chat = () => {
       />
     </>
   );
-};
+});
 
 export default Chat;

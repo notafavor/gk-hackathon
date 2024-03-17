@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 import {
   UploadDragFile,
-  Preloader,
+  Status,
   Button,
   ProgressBar,
 } from "@quark-uilib/components";
@@ -152,7 +152,6 @@ const UploadFIleProgressBar = observer(() => {
       )}
       <div className="UploadedArea">
         {uploadedFiles.map((file, index) => {
-          console.log(file.status);
           const fileDate = new Date(file.date);
           const formattedDate = fileDate.toLocaleDateString(undefined, {
             day: "numeric",
@@ -172,7 +171,7 @@ const UploadFIleProgressBar = observer(() => {
                         Дата загрузки: {formattedDate}
                       </span>
                     </div>
-                    <Preloader type="star" />
+                    <Status status="warning">Обработка</Status> 
                   </div>
                   <i className="fas fa-check"></i>
                 </>
