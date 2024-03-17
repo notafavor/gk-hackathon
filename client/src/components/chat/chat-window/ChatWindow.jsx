@@ -22,7 +22,7 @@ const ChatWindow = observer(
 
     const handleSubmit = async () => {
       try {
-        const response = await sendMessageChat(recognition.chanel, message);
+        const response = await sendMessageChat(recognition.channel, message);
         onMessageSent({ message, originIpAddress: ipAddress });
         setMessage("");
         return response;
@@ -82,14 +82,17 @@ const ChatWindow = observer(
           </button>
         </div>
         <div ref={chatWindowBody} className="chat-window__body">
-          {messages.map(({ originIpAddress, ...props }) => (
-            <ChatMessage
-              key={Math.random()}
-              isSameOrigin={originIpAddress === ipAddress}
-              message={props.msg}
-              {...props}
-            />
-          ))}
+          {messages.map(({ originIpAddress, ...props }) => {
+            // console.log({...props})
+            return (
+              <ChatMessage
+                key={Math.random()}
+                isSameOrigin={originIpAddress === ipAddress}
+                message={props.msg}
+                {...props}
+              />
+            );
+          })}
         </div>
         <div className="chat-window__footer">
           <textarea

@@ -15,7 +15,7 @@ export const TranscriptionList = observer(() => {
       try {
         const data = await fetchRecognitionsOne(id);
         recognition.setRecognition(data.result);
-        recognition.setChanel(data.chanel);
+        recognition.setChannel(data.channel);
       } catch (error) {
         console.error(error);
       }
