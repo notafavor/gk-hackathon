@@ -59,9 +59,9 @@ class SendMessageView(views.APIView):
                 
                 # TODO: обработать команды
                 if text and str(text).startswith('/summary') and instance.summary:
-                    send_channel_message(instance.channel, "type": "chat_message", "msg": str(text))
+                    send_channel_message(instance.channel, {"type": "chat_message", "msg": str(text)})
                 elif text and str(text).startswith('/tasks') and instance.tasks:
-                    send_channel_message(instance.channel, "type": "chat_message", "msg": str(text))
+                    send_channel_message(instance.channel, {"type": "chat_message", "msg": str(text)})
                 else:
                     send_channel_message(
                         instance.channel, {"type": "chat_message", "msg": "in process.."}
