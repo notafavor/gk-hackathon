@@ -10,8 +10,8 @@ ENV PYTHONUNBUFFERED 1
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN apk add ffmpeg
 RUN pip install -r requirements.txt
+RUN apk add ffmpeg
 
 # copy project
 COPY . .

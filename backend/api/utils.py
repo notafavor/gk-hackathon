@@ -1,3 +1,4 @@
+import subprocess
 from hashlib import md5
 import os
 from django.conf import settings
@@ -5,7 +6,7 @@ from rest_framework.response import Response
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from celery.result import AsyncResult
-import moviepy.editor as mp
+
 
 USER_MODEL = get_user_model()
 WAV_FORMAT = '.wav'
@@ -33,9 +34,12 @@ def send_channel_message(channel_name, message):
     async_to_sync(channel_layer.send)(channel_name, message)
 
 def convert_to_wav(file_path):
-    clip = mp.VideoFileClip(file_path)
     path, filenamne = os.path.split(file_path)
     basename, ext = os.path.splitext(filenamne)
     new_path = os.path.join(path, basename + WAV_FORMAT)
-    clip.audio.write_audiofile(new_path)
-    return new_path
+    print(new_path, path)
+    command = f"ffmpeg -i {file_path} {new_path}"
+    if os.path.exists(new_path):
+        os.remove(new_path)
+    subprocess.call(command, shell=True) # TODO: нужна проверка на дорожку
+    return new_path, basename + WAV_FORMAT
