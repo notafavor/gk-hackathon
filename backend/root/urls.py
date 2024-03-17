@@ -24,14 +24,11 @@ urlpatterns = [
     path("api/v1/auth/", LoginAPIView.as_view(), name="user_login"),
     path("api/v1/logout/", LogoutAPIView.as_view(), name="user_logout"),
     path("api/v1/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path("api/v1/send_message/", views.SendMessageView.as_view(), name="send_message"),
     path("api-auth/", include("rest_framework.urls")),
 ]
 
 if settings.IS_DEVELOP:
-    # urlpatterns += [
-    #     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-    #     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    # ]
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
     urlpatterns += staticfiles_urlpatterns()

@@ -96,7 +96,7 @@ services:
     build: ./backend
     command: celery -A root worker -l info
     volumes:
-      - ./backend/:/opt/app/
+      - ./backend:/opt/app
     depends_on:
       - redis
     env_file:
