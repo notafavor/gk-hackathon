@@ -20,6 +20,9 @@ const AuthPage = observer(() => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorName, setErrorName] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPass, setErrorPass] = useState("");
 
   const handleSubmit = async () => {
     try {
@@ -34,6 +37,9 @@ const AuthPage = observer(() => {
       navigate(HOME_ROUTE);
     } catch (e) {
       console.error(e);
+      setErrorName?.(e.response.data.username[0]);
+      setErrorEmail?.(e.response.data.username[0]);
+      setErrorPass?.(e.response.data.username[0]);
     }
   };
 
@@ -45,6 +51,8 @@ const AuthPage = observer(() => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Имя"
+            status={errorName && "error"}
+            statusText={errorName}
           />
         </Form.Field>
         {!isLogin && (
@@ -54,6 +62,8 @@ const AuthPage = observer(() => {
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Почта"
+              status={errorEmail && "error"}
+              statusText={errorEmail}
             />
           </Form.Field>
         )}
@@ -63,6 +73,8 @@ const AuthPage = observer(() => {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Пароль"
+            status={errorPass && "error"}
+            statusText={errorPass}
           />
         </Form.Field>
 

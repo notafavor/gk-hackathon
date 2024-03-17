@@ -8,10 +8,7 @@
 .TranscriptionItemWrapper {
     display: flex;
     align-items: flex-start;
-
-    .divider {
-        margin-left: 25px;
-    }
+    flex-wrap: wrap;
 }
 
 .TranscriptionItemTitle {
@@ -23,6 +20,10 @@
     max-width: 14vw;
     padding: 4px 12px;
     color: rgb(54, 65, 82);
+
+    @media (max-width: 850px) {
+        padding: 4px 0;
+    }
 }
 
 .TranscriptionItemText {
@@ -43,4 +44,8 @@
     min-height: 1em;
     background-color: currentcolor;
     opacity: 0.25;
+
+    @media (max-width: 850px) {
+        display: none;
+    }
 }

@@ -13,19 +13,15 @@ const Chat = () => {
       `wss://team5.opvk.tech/chat/recognition/${id}/`
     );
 
-    socket.onopen = () => {
-      console.log("Connection Established!");
-    };
+    socket.onopen = () => {};
 
     socket.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
-      console.log("message");
+      console.log(receivedMessage);
       setMessages((prevMessages) => [...prevMessages, receivedMessage]);
     };
 
-    socket.onclose = () => {
-      console.log("Connection Closed!");
-    };
+    socket.onclose = () => {};
 
     return () => {
       if (socket.readyState === 1) {
@@ -45,17 +41,6 @@ const Chat = () => {
   const handleMessageSent = (message) => {
     setMessages([...messages, { ...message }]);
   };
-
-  // const handleMessageSent = (message) => {
-  //   if (messageInput.trim() !== "") {
-  //     const message = {
-  //       text: messageInput,
-  //       timestamp: new Date().toISOString(),
-  //     };
-  //     socket.send(JSON.stringify(message));
-  //     setMessageInput("");
-  //   }
-  // };
 
   return (
     <>

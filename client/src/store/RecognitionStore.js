@@ -3,7 +3,7 @@ import { makeAutoObservable } from "mobx";
 export default class RecognitionStore {
   constructor() {
     this._recognition = [];
-    this._chanel = "";
+    this._channel = "";
     makeAutoObservable(this);
   }
 
@@ -15,11 +15,11 @@ export default class RecognitionStore {
     return this._recognition;
   }
 
-  setChanel(chanel) {
-    this._chanel = chanel;
+  setChannel(channel) {
+    this._channel = channel;
   }
 
-  get chanel() {
-    return this._chanel;
+  get channel() {
+    return this._channel;
   }
 }

@@ -6,9 +6,6 @@ const TranscriptionItem = ({ item }) => {
     <div className="TranscriptionItemWrapper">
       <div className="TranscriptionItemTitle">{item.speaker}</div>
       <div className="TranscriptionItemText home__text">{item.msg}</div>
-      {/* <TranscriptionItemText className="home__text"> //TODO: стили накидать
-        {item.timecode}
-      </TranscriptionItemText> */}
       <div className="Divider" />
     </div>
   );

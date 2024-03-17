@@ -128,6 +128,8 @@ const UploadFIleProgressBar = observer(() => {
         isMultiple={false}
         style={{ marginBottom: "30px" }}
         onChange={uploadFile}
+        description="Формат MP4, WAV"
+        accept=".mp4,.wav"
       />
       {showProgress && (
         <div className="LoadingArea">
@@ -150,6 +152,7 @@ const UploadFIleProgressBar = observer(() => {
       )}
       <div className="UploadedArea">
         {uploadedFiles.map((file, index) => {
+          console.log(file.status);
           const fileDate = new Date(file.date);
           const formattedDate = fileDate.toLocaleDateString(undefined, {
             day: "numeric",
@@ -158,7 +161,7 @@ const UploadFIleProgressBar = observer(() => {
           });
           return (
             <li className="FileRow" key={index}>
-              {file.status === "pending" ? (
+              {file.status === "pending" || file.status === "received" ? (
                 <>
                   <div className="UploadFileContent upload">
                     <div className="UploadFileDetails">
