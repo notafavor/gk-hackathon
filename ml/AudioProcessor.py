@@ -77,16 +77,16 @@ class AudioProcessor:
         return ' '.join(summaries)
 
 
-    def predict_zero_shot(text, label_texts, model, tokenizer, label='entailment', normalize=True):
-        tokens = tokenizer([text] * len(label_texts), label_texts, truncation=True, return_tensors='pt', padding=True).to(torch.device("cuda"))
+    def predict_zero_shot(self, text, label_texts, label='entailment', normalize=True):
+        tokens = self.classifier_tokenizer([text] * len(label_texts), label_texts, truncation=True, return_tensors='pt', padding=True)
         with torch.inference_mode():
-            result = torch.softmax(model(**tokens.to(model.device)).logits, -1)
-        proba = result[:, model.config.label2id[label]].cpu().numpy()
+            result = torch.softmax(self.classifier_model(**tokens.to(self.classifier_model.device)).logits, -1)
+        proba = result[:, self.classifier_model.config.label2id[label]].cpu().numpy()
         if normalize:
             proba /= sum(proba)
         return proba
 
-    def process_wav_to_json(self, file_path):
+    def process_wav_to_json(self, file_path, author_id):
         # audio_content = self.read_file_from_s3(bucket_name, file_key)
         transcription = self.transcribe_and_diarize(file_path)
         torch.cuda.empty_cache
@@ -99,13 +99,14 @@ class AudioProcessor:
             "status": "success", 
             "result": [],
             "summary": "",
-            "tasks": []            
+            "tasks": [],
+            "author": author_id
         }
         for seg, spk, sent in transcription:
             if spk == spk_buf:
                 text += f'{sent} '
             else:
-                text += f'{spk}: {sent}'
+                text += f'{spk}: {sent}|||'
             results["result"].append({
                 'msg': sent,
                 'speaker': spk,
@@ -113,10 +114,9 @@ class AudioProcessor:
             })
             spk_buf = spk
 
-            for s in sent.split():
-                proba = self.predict_zero_shot(s, self.classes, self.classifier_model, self.classifier_tokenizer)
+            for s in sent.split('.'):
+                proba = self.predict_zero_shot(s, self.classes)
                 if proba.argmax() == 0:
-                    tasks += f'{spk}: {s}'
                     results["tasks"].append({
                         'msg': s,
                         'speaker': spk,
@@ -124,7 +124,7 @@ class AudioProcessor:
                     })
         
         summ = self.summarize(text)
-        results['summary'] = summ
+        results['summary'] = summ.replace('finished', '')
         print(text)
         print()
         print()
@@ -150,7 +150,7 @@ while True:
                 tmp_file_name = tmp_file.name
             print(f"Файл временно сохранен как {tmp_file_name}")
             URL_patch = f"https://team5.opvk.tech/api/v1/recognitions/{status[0]['id']}/"
-            data = proc.process_wav_to_json(tmp_file_name)
+            data = proc.process_wav_to_json(tmp_file_name, status[0]['author'])
             response = requests.patch(URL_patch, json=data, verify=False, auth=('admin', 'admin'))
             os.remove(tmp_file_name)
             print(f"Файл {tmp_file_name} был удален")
