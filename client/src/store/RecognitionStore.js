@@ -5,7 +5,7 @@ export default class RecognitionStore {
     this._recognition = [];
     this._channel = "";
     this._summary = "";
-    this._tasks = "";
+    this._tasks = [];
     this._fetchWebSocket = true;
     makeAutoObservable(this);
   }

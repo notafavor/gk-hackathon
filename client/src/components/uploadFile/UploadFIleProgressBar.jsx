@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { $authHost } from "../../http";
 import { refreshToken } from "../../http/userAPI";
 import "./style.scss";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   UploadDragFile,
@@ -31,24 +31,32 @@ const UploadFIleProgressBar = observer(() => {
         try {
           const file = await fetchRecognitions();
           setUploadedFiles(() => [
-            ...file.map((file) => ({
-              id: file.id,
-              name: file._file.name,
-              date: file._file.dt_create,
-              status: file.status,
-            })),
+            ...file.map((file) => {
+              console.log(file);
+              return {
+                id: file.id,
+                name: file._file.name,
+                date: file._file.dt_create,
+                status: file.status,
+                link: file._file.file,
+              };
+            }),
           ]);
         } catch (error) {
           if (error.response && error.response.status === 401) {
             await refreshToken();
             const file = await fetchRecognitions();
             setUploadedFiles(() => [
-              ...file.map((file) => ({
-                id: file.id,
-                name: file._file.name,
-                date: file._file.dt_create,
-                status: file.status,
-              })),
+              ...file.map((file) => {
+                console.log(file);
+                return {
+                  id: file.id,
+                  name: file._file.name,
+                  date: file._file.dt_create,
+                  status: file.status,
+                  link: file._file.file,
+                };
+              }),
             ]);
           }
         }
@@ -71,8 +79,8 @@ const UploadFIleProgressBar = observer(() => {
     if (!file) return;
 
     const fileName =
-      file.name.length > 20
-        ? `${file.name.substring(0, 21)}... .${file.name.split(".")[1]}`
+      file.name.length > 1
+        ? `${file.name.substring(0, 10)}... .${file.name.split(".")[1]}`
         : file.name;
 
     let accessToken = localStorage.getItem("accessToken");
@@ -152,6 +160,7 @@ const UploadFIleProgressBar = observer(() => {
       )}
       <div className="UploadedArea">
         {uploadedFiles.map((file, index) => {
+          console.log(file);
           const fileDate = new Date(file.date);
           const formattedDate = fileDate.toLocaleDateString(undefined, {
             day: "numeric",
@@ -171,7 +180,7 @@ const UploadFIleProgressBar = observer(() => {
                         Дата загрузки: {formattedDate}
                       </span>
                     </div>
-                    <Status status="warning">Обработка</Status> 
+                    <Status status="warning">Обработка</Status>
                   </div>
                   <i className="fas fa-check"></i>
                 </>
@@ -179,7 +188,7 @@ const UploadFIleProgressBar = observer(() => {
                 <div className="UploadFileContent upload">
                   <div className="UploadFileDetails">
                     <span className="details-span name">
-                      Имя файла: {file.name}
+                      <Link to={file.link}>Имя файла: {file.name}</Link>
                     </span>
                     <span className="details-span name">
                       Дата загрузки: {formattedDate}

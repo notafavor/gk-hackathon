@@ -3,7 +3,6 @@ $lightBlue: #d5ebff;
 $gray: #404040;
 $white: #fff;
 
-
 .LoadingArea {
     width: 100%;
 }
@@ -80,6 +79,14 @@ $white: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    @media (max-width: 980px) {
+        right: 0;
+        bottom: 0;
+        width: -webkit-fill-available;
+        height: -webkit-fill-available;
+        flex-wrap: wrap;
+    }
 }
 
 .UploadFileDetails {

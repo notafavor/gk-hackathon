@@ -14,9 +14,8 @@ const Summary = observer(() => {
       recognition.setChannel("");
       try {
         const data = await fetchRecognitionsOne(id);
-        console.log(data);
         recognition.setSummary(data.summary);
-        recognition.setTasks(JSON.stringify(data.tasks));
+        recognition.setTasks(data.tasks);
         recognition.setFetchWebSocket(true);
       } catch (error) {
         console.error(error);
@@ -26,6 +25,8 @@ const Summary = observer(() => {
     fetchRecognition();
     recognition.setFetchWebSocket(false);
   }, []);
+
+  console.log(recognition.tasks);
 
   return (
     <div className="TranscriptionItemWrapper">
@@ -40,8 +41,14 @@ const Summary = observer(() => {
       {recognition.summary && (
         <div>
           <div className="TranscriptionItemTitle">Tasks:</div>
-          <div className="TranscriptionItemText home__text">
-            {recognition.tasks}
+          <div>
+            {recognition.tasks.map((item, index) => (
+              <div key={index}>
+                <p>Message: {item.msg}</p>
+                <p>Time: {item.time}</p>
+                <p>Speaker: {item.speaker}</p>
+              </div>
+            ))}
           </div>
         </div>
       )}
