@@ -28,6 +28,13 @@ class File(BaseProtected):
         upload_to=get_file_path,
         validators=[FileExtensionValidator(allowed_extensions=["wav", "mp4"])],
     )
+    source_file = models.FileField(
+        verbose_name="Файл",
+        upload_to=get_file_path,
+        validators=[FileExtensionValidator(allowed_extensions=["wav", "mp4"])],
+        null=True,
+        blank=True,
+    )
     name = models.CharField("Имя файла", max_length=255, null=True, blank=True)
 
     class Meta:
@@ -38,6 +45,8 @@ class File(BaseProtected):
         return "%s %s" % (super().__str__(), self.name)
 
     def save(self, *args, **kwargs):
+        if not self.pk and not self.source_file:
+            self.source_file = self.file
         self.name = os.path.basename(self.file.name)
         return super().save(*args, **kwargs)
 

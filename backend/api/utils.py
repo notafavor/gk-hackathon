@@ -12,22 +12,28 @@ USER_MODEL = get_user_model()
 WAV_FORMAT = '.wav'
 
 
-def get_file_path(instance, filename):
+def get_file_params(filename):
     name, ext = os.path.splitext(filename)
     hash_code = md5((settings.SECRET_KEY + name).encode("utf-8")).hexdigest()
+    return name, ext, hash_code
+
+def get_file_path(instance, filename):
+    name, ext, hash_code = get_file_params(filename)
     path = os.path.join("media", "files", hash_code[:3])
     return os.path.join(path, "%s.%s%s" % (hash_code[:16], slugify(name, allow_unicode=True), ext))
 
+def get_source_file_path(instance, filename):
+    name, ext, hash_code = get_source_file_path(filename)
+    path = os.path.join("media", "files", "sources", hash_code[:3])
+    return os.path.join(path, "%s.%s%s" % (hash_code[:16], slugify(name, allow_unicode=True), ext))
 
 def get_status(request, task_id):
     task_result = AsyncResult(task_id)
     result = {"task_id": task_id, "task_status": task_result.status, "task_result": task_result.result}
     return Response(result, status=200)
 
-
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-
 
 def send_channel_message(channel_name, message):
     channel_layer = get_channel_layer()
