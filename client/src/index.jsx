@@ -18,11 +18,11 @@ root.render(
       recognition: new RecognitionStore()
     }}
   >
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <BrowserRouter>
         <App />
       </BrowserRouter>
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </Context.Provider>
 );
 

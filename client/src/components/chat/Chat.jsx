@@ -21,6 +21,7 @@ const Chat = observer(() => {
 
       socket.onmessage = (event) => {
         const receivedMessage = JSON.parse(event.data);
+        console.log("onmessage");
         setMessages((prevMessages) => [...prevMessages, receivedMessage]);
       };
 
@@ -37,6 +38,8 @@ const Chat = observer(() => {
       };
     }
   }, []);
+
+  console.log(messages);
 
   const handleClose = () => {
     setIsOpen(false);
