@@ -30,7 +30,6 @@ class RecognitionViewSet(PotectedViewMixin, viewsets.ModelViewSet):
     
     def get_queryset(self):
         qs = super().get_queryset()
-        print('******** ', self.request.query_params)
         qp = self.request.query_params.get('q')
         only_new = qp and qp == 'new'
         if only_new:

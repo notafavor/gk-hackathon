@@ -119,7 +119,7 @@ services:
     build: ./backend
     command: celery -A root worker -l info
     volumes:
-      - /data/team5/backend/media/:/opt/app/media/
+      - /data/team5/backend/:/opt/app/
     depends_on:
       - redis
     env_file:
